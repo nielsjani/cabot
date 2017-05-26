@@ -1,0 +1,7 @@
+package com.cegeka.cabot.oorlogje;
+
+public final class OorlogjeConstants {
+    public static final int MAXIMALE_KAARTWAARDE = 5;
+    public static final int MINIMALE_KAARTWAARDE = 1;
+    public static final int INITIELE_HAND_GROOTTE = 5;
+}
