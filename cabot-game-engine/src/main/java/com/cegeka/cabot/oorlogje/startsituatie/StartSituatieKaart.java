@@ -17,6 +17,14 @@ public class StartSituatieKaart {
         this.kaartType = kaartType;
     }
 
+    public int getWaarde() {
+        return waarde;
+    }
+
+    public KaartType getKaartType() {
+        return kaartType;
+    }
+
     @Override
     public boolean equals(Object obj) {
         return EqualsBuilder.reflectionEquals(obj, this);

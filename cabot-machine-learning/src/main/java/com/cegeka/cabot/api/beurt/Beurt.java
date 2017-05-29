@@ -2,10 +2,12 @@ package com.cegeka.cabot.api.beurt;
 
 import java.util.List;
 
+import static com.google.common.collect.Lists.newArrayList;
+
 public class Beurt {
-    private List<Kaart> botHandkaarten;
-    private List<Kaart> botGespeeldeKaarten;
-    private List<Kaart> mensGespeeldeKaarten;
+    private List<Kaart> botHandkaarten = newArrayList();
+    private List<Kaart> botGespeeldeKaarten = newArrayList();
+    private List<Kaart> mensGespeeldeKaarten = newArrayList();
     private Kaart gespeeldeKaartDoorTegenstanderHuidigeBeurt;
     private Kaart gespeeldeKaartDoorBotHuidigeBeurt;
     private boolean botMochtAlsEerste;

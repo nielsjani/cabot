@@ -1,6 +1,9 @@
 package com.cegeka.cabot.oorlogje.startsituatie;
 
+import com.cegeka.cabot.api.beurt.Kaart;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class StartSituatie {
     private final List<StartSituatieKaart> botKaarten;
@@ -19,6 +22,14 @@ public class StartSituatie {
 
     public List<StartSituatieKaart> getMensKaarten() {
         return mensKaarten;
+    }
+
+    public List<Kaart> getBotKaartenAsKaart(){
+        return botKaarten.stream().map(botkaart-> new Kaart(botkaart.getWaarde())).collect(Collectors.toList());
+    }
+
+    public List<Kaart> getMensKaartenAsKaart(){
+        return mensKaarten.stream().map(menskaart-> new Kaart(menskaart.getWaarde())).collect(Collectors.toList());
     }
 
     public boolean isMoetBotBeginnen() {

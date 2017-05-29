@@ -17,6 +17,11 @@ public class OorlogjeInterface {
         this.rewardCalculator = new RewardCalculator();
     }
 
+    public OorlogjeInterface(MachineLearningInterface machineLearningInterface) {
+        this.machineLearningInterface = machineLearningInterface;
+        this.rewardCalculator = new RewardCalculator();
+    }
+
     public StartSituatie createStartSituatie() {
         return new StartSituatieFactory().createStartSituatie();
     }

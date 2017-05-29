@@ -10,6 +10,6 @@ public class MachineLearningInterface {
     }
 
     public void geefRewardVoorBeurt(Beurt beurt, Kaart gespeeldeKaart, int reward){
-
+        System.out.println("Received reward: " + reward);
     }
 }
