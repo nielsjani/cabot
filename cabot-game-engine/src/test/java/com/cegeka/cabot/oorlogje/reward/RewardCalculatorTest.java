@@ -5,13 +5,34 @@ import com.cegeka.cabot.api.beurt.Beurt;
 import com.cegeka.cabot.api.beurt.Kaart;
 import org.junit.Test;
 
+import static com.cegeka.cabot.api.beurt.Beurt.beurt;
+import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RewardCalculatorTest extends UnitTest{
-
+public class RewardCalculatorTest extends UnitTest {
 
     @Test
-    public void bepaalRewardVoorGespeeldeKaart_GivenGewonnenInBeurtWaarTegenstanderBegonThenMeestePuntenVoorKleinsteVerschil(){
+    public void bepaalRewardVoorBotAlsEersteAanZetEnTegenstanderNogGeenKaartGelegd() {
+        Beurt beurt = beurt().withBotHandkaarten(newArrayList(new Kaart(2), new Kaart(1), new Kaart(4), new Kaart(5), new Kaart(3)));
+
+        assertThat(new RewardCalculator().bepaalRewardVoorBotAlsEersteAanZetEnTegenstanderNogGeenKaartGelegd(beurt, new Kaart(5))).isEqualTo(100);
+        assertThat(new RewardCalculator().bepaalRewardVoorBotAlsEersteAanZetEnTegenstanderNogGeenKaartGelegd(beurt, new Kaart(4))).isEqualTo(80);
+        assertThat(new RewardCalculator().bepaalRewardVoorBotAlsEersteAanZetEnTegenstanderNogGeenKaartGelegd(beurt, new Kaart(3))).isEqualTo(60);
+        assertThat(new RewardCalculator().bepaalRewardVoorBotAlsEersteAanZetEnTegenstanderNogGeenKaartGelegd(beurt, new Kaart(2))).isEqualTo(40);
+        assertThat(new RewardCalculator().bepaalRewardVoorBotAlsEersteAanZetEnTegenstanderNogGeenKaartGelegd(beurt, new Kaart(1))).isEqualTo(20);
+    }
+
+    @Test
+    public void bepaalRewardVoorBotAlsEersteAanZetEnTegenstanderNogGeenKaartGelegd_doublesAreIgnoredInCalculations() {
+        Beurt beurt = beurt().withBotHandkaarten(newArrayList(new Kaart(2), new Kaart(3), new Kaart(3), new Kaart(3), new Kaart(1)));
+
+        assertThat(new RewardCalculator().bepaalRewardVoorBotAlsEersteAanZetEnTegenstanderNogGeenKaartGelegd(beurt, new Kaart(3))).isEqualTo(100);
+        assertThat(new RewardCalculator().bepaalRewardVoorBotAlsEersteAanZetEnTegenstanderNogGeenKaartGelegd(beurt, new Kaart(2))).isEqualTo(80);
+        assertThat(new RewardCalculator().bepaalRewardVoorBotAlsEersteAanZetEnTegenstanderNogGeenKaartGelegd(beurt, new Kaart(1))).isEqualTo(60);
+    }
+
+    @Test
+    public void bepaalRewardVoorGespeeldeKaart_GivenGewonnenInBeurtWaarTegenstanderBegonThenMeestePuntenVoorKleinsteVerschil() {
         assertGewonnenInBeurtWaarTegenstanderBegon(1, 2, 100);
         assertGewonnenInBeurtWaarTegenstanderBegon(1, 3, 80);
         assertGewonnenInBeurtWaarTegenstanderBegon(1, 4, 60);
@@ -28,7 +49,7 @@ public class RewardCalculatorTest extends UnitTest{
     }
 
     @Test
-    public void bepaalRewardVoorGespeeldeKaart_GivenGewonnenInBeurtWaarBotBegonThenMeestePuntenVoorKleinsteVerschil(){
+    public void bepaalRewardVoorGespeeldeKaart_GivenGewonnenInBeurtWaarBotBegonThenMeestePuntenVoorKleinsteVerschil() {
         assertGewonnenInBeurtWaarBotBegon(1, 1, 100);
         assertGewonnenInBeurtWaarBotBegon(1, 2, 80);
         assertGewonnenInBeurtWaarBotBegon(1, 3, 60);
@@ -49,7 +70,7 @@ public class RewardCalculatorTest extends UnitTest{
     }
 
     @Test
-    public void bepaalRewardVoorGespeeldeKaart_GivenVerlorenInBeurtWaarTegenstanderBegonThenMeestePuntenVoorGrootsteVerschil(){
+    public void bepaalRewardVoorGespeeldeKaart_GivenVerlorenInBeurtWaarTegenstanderBegonThenMeestePuntenVoorGrootsteVerschil() {
         assertVerlorenInBeurtWaarTegenstanderBegon(5, 1, -20);
         assertVerlorenInBeurtWaarTegenstanderBegon(5, 2, -40);
         assertVerlorenInBeurtWaarTegenstanderBegon(5, 3, -60);
@@ -72,7 +93,7 @@ public class RewardCalculatorTest extends UnitTest{
     }
 
     @Test
-    public void bepaalRewardVoorGespeeldeKaart_GivenVerlorenInBeurtWaarBotBegonThenMeestePuntenVoorGrootsteVerschil(){
+    public void bepaalRewardVoorGespeeldeKaart_GivenVerlorenInBeurtWaarBotBegonThenMeestePuntenVoorGrootsteVerschil() {
         assertVerlorenInBeurtWaarBotBegon(5, 1, -40);
         assertVerlorenInBeurtWaarBotBegon(5, 2, -60);
         assertVerlorenInBeurtWaarBotBegon(5, 3, -80);
@@ -129,12 +150,12 @@ public class RewardCalculatorTest extends UnitTest{
     }
 
     private Beurt givenTegenstanderSpeeltEerstMetWaarde(int kaartWaarde) {
-        return Beurt.beurt().withBotMochtAlsEerste(false)
+        return beurt().withBotMochtAlsEerste(false)
                 .withGespeeldeKaartDoorTegenstanderHuidigeBeurt(new Kaart(kaartWaarde));
     }
 
     private Beurt givenTegenstanderSpeeltAlsTweedeMetWaarde(int kaartWaarde) {
-        return Beurt.beurt().withBotMochtAlsEerste(true)
+        return beurt().withBotMochtAlsEerste(true)
                 .withGespeeldeKaartDoorTegenstanderHuidigeBeurt(new Kaart(kaartWaarde));
     }
 }

@@ -28,7 +28,10 @@ public class OorlogjeInterface {
 
     public Kaart bepaalTeSpelenKaart(Beurt beurt) {
         Kaart teSpelenKaart = machineLearningInterface.getTeSpelenKaartVoor(beurt);
-        if(!beurt.isBotMochtAlsEerste()){
+        //TODO: waarschijnlijk moeten we hier ook altijd reward geven, onafhankelijk van wie mocht starten.
+        // anders heeft bot geen enkel scenario voor wanneer hij mocht beginnen
+        //rewardCalculator.bepaalRewardVoorBotAlsEersteAanZetEnTegenstanderNogGeenKaartGelegd(beurt, teSpelenKaart)
+        if (!beurt.isBotMochtAlsEerste()) {
             int reward = rewardCalculator.bepaalRewardVoorGespeeldeKaart(beurt, teSpelenKaart);
             machineLearningInterface.geefRewardVoorBeurt(beurt, teSpelenKaart, reward);
         }

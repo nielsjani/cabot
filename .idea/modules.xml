@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/cabot.iml" filepath="$PROJECT_DIR$/cabot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cabot-game-engine/cabot-game-engine.iml" filepath="$PROJECT_DIR$/cabot-game-engine/cabot-game-engine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cabot-machine-learning/cabot-machine-learning.iml" filepath="$PROJECT_DIR$/cabot-machine-learning/cabot-machine-learning.iml" />
+    </modules>
+  </component>
+</project>

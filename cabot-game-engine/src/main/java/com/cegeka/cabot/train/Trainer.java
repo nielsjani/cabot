@@ -44,9 +44,11 @@ public class Trainer {
         if (player1Beurt.isBotMochtAlsEerste()) {
             resolveGelegdeKaart(oorlogjeInterface, player1Beurt, player2Beurt);
             resolveGelegdeKaart(oorlogjeInterface, player2Beurt, player1Beurt);
+            oorlogjeInterface.geefRewardVoorBeurtWaarBotMochtBeginnen(player1Beurt);
         } else {
             resolveGelegdeKaart(oorlogjeInterface, player2Beurt, player1Beurt);
             resolveGelegdeKaart(oorlogjeInterface, player1Beurt, player2Beurt);
+            oorlogjeInterface.geefRewardVoorBeurtWaarBotMochtBeginnen(player2Beurt);
         }
         boolean isPlayer1Gewonnen = player1Gewonnen(player1Beurt);
         if (isPlayer1Gewonnen) {
