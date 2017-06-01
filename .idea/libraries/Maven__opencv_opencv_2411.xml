@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: opencv:opencv:2411">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.m2/repository/opencv/opencv/2411/opencv-2411.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.m2/repository/opencv/opencv/2411/opencv-2411-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.m2/repository/opencv/opencv/2411/opencv-2411-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
