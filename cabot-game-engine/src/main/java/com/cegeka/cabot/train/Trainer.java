@@ -1,6 +1,7 @@
 package com.cegeka.cabot.train;
 
 import com.cegeka.cabot.api.GameEngineInterface;
+import com.cegeka.cabot.api.MachineLearningInterface;
 import com.cegeka.cabot.api.beurt.Beurt;
 import com.cegeka.cabot.api.beurt.Kaart;
 import com.cegeka.cabot.oorlogje.api.OorlogjeInterface;
@@ -10,9 +11,9 @@ public class Trainer {
 
     private int player1Punten = 0;
     private int player2Punten = 0;
-    private RandomMachineLearningInterface machineLearningInterface;
+    private MachineLearningInterface machineLearningInterface;
 
-    public Trainer(RandomMachineLearningInterface machineLearningInterface) {
+    public Trainer(MachineLearningInterface machineLearningInterface) {
         this.machineLearningInterface = machineLearningInterface;
     }
 

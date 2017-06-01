@@ -4,7 +4,7 @@ import com.cegeka.cabot.UnitTest;
 import com.cegeka.cabot.api.MachineLearningInterface;
 import com.cegeka.cabot.api.beurt.Beurt;
 import com.cegeka.cabot.api.beurt.Kaart;
-import com.cegeka.cabot.oorlogje.reward.RewardCalculator;
+import com.cegeka.cabot.reward.RewardCalculator;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

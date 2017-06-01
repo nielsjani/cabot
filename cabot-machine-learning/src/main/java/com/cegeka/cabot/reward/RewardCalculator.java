@@ -1,4 +1,4 @@
-package com.cegeka.cabot.oorlogje.reward;
+package com.cegeka.cabot.reward;
 
 import com.cegeka.cabot.api.beurt.Beurt;
 import com.cegeka.cabot.api.beurt.Kaart;

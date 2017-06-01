@@ -17,6 +17,7 @@ public class BaseLineAlgo implements MachineLearningInterface {
 
     @Override
     public void kenRewardToeVoorGespeeldeKaart(Beurt beurt, Kaart gespeeldDoorMLAlgo, int reward) {
+        System.out.println(String.format("Kaart gespeeld %s met reward %s", gespeeldDoorMLAlgo.getWaarde(), reward));
         // Do nothing with rewards, i'm pretty dumb
     }
 }
