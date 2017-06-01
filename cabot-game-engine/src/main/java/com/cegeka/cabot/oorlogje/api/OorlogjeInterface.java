@@ -1,5 +1,6 @@
 package com.cegeka.cabot.oorlogje.api;
 
+import com.cegeka.cabot.algorithm.baseline.BaseLineAlgo;
 import com.cegeka.cabot.api.MachineLearningInterface;
 import com.cegeka.cabot.api.beurt.Beurt;
 import com.cegeka.cabot.api.beurt.Kaart;
@@ -13,7 +14,7 @@ public class OorlogjeInterface {
     private RewardCalculator rewardCalculator;
 
     public OorlogjeInterface() {
-        this.machineLearningInterface = new MachineLearningInterface();
+        this.machineLearningInterface = new BaseLineAlgo();
         this.rewardCalculator = new RewardCalculator();
     }
 
@@ -27,13 +28,13 @@ public class OorlogjeInterface {
     }
 
     public Kaart bepaalTeSpelenKaart(Beurt beurt) {
-        Kaart teSpelenKaart = machineLearningInterface.getTeSpelenKaartVoor(beurt);
+        Kaart teSpelenKaart = machineLearningInterface.bepaalKaartOmTeSpelen(beurt, beurt.getGespeeldeKaartDoorTegenstanderHuidigeBeurt());
         //TODO: waarschijnlijk moeten we hier ook altijd reward geven, onafhankelijk van wie mocht starten.
         // anders heeft bot geen enkel scenario voor wanneer hij mocht beginnen
         //rewardCalculator.bepaalRewardVoorBotAlsEersteAanZetEnTegenstanderNogGeenKaartGelegd(beurt, teSpelenKaart)
         if (!beurt.isBotMochtAlsEerste()) {
             int reward = rewardCalculator.bepaalRewardVoorGespeeldeKaart(beurt, teSpelenKaart);
-            machineLearningInterface.geefRewardVoorBeurt(beurt, teSpelenKaart, reward);
+            machineLearningInterface.kenRewardToeVoorGespeeldeKaart(beurt, teSpelenKaart, reward);
         }
         return teSpelenKaart;
     }
@@ -41,6 +42,6 @@ public class OorlogjeInterface {
     public void geefRewardVoorBeurtWaarBotMochtBeginnen(Beurt beurt) {
         Kaart gespeeldeKaartDoorBot = beurt.getGespeeldeKaartDoorBotHuidigeBeurt();
         int reward = rewardCalculator.bepaalRewardVoorGespeeldeKaart(beurt, gespeeldeKaartDoorBot);
-        machineLearningInterface.geefRewardVoorBeurt(beurt, gespeeldeKaartDoorBot, reward);
+        machineLearningInterface.kenRewardToeVoorGespeeldeKaart(beurt, gespeeldeKaartDoorBot, reward);
     }
 }

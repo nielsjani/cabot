@@ -30,13 +30,13 @@ public class OorlogjeInterfaceTest extends UnitTest{
         Beurt beurt = beurt().withBotGespeeldeKaarten(newArrayList())
                 .withBotHandkaarten(newArrayList(new Kaart(2), teSpelenKaartBepaaldDoorMachine, new Kaart(1)))
                 .withMensGespeeldeKaarten(newArrayList());
-        when(machineLearningInterface.getTeSpelenKaartVoor(beurt)).thenReturn(teSpelenKaartBepaaldDoorMachine);
+        when(machineLearningInterface.bepaalKaartOmTeSpelen(beurt, beurt.getGespeeldeKaartDoorTegenstanderHuidigeBeurt())).thenReturn(teSpelenKaartBepaaldDoorMachine);
         when(rewardCalculator.bepaalRewardVoorGespeeldeKaart(beurt, teSpelenKaartBepaaldDoorMachine)).thenReturn(41);
 
         Kaart kaartTeSpelen = oorlogjeInterface.bepaalTeSpelenKaart(beurt);
 
         assertThat(kaartTeSpelen).isEqualTo(teSpelenKaartBepaaldDoorMachine);
-        verify(machineLearningInterface).getTeSpelenKaartVoor(beurt);
-        verify(machineLearningInterface).geefRewardVoorBeurt(beurt, teSpelenKaartBepaaldDoorMachine, 41);
+        verify(machineLearningInterface).bepaalKaartOmTeSpelen(beurt, beurt.getGespeeldeKaartDoorTegenstanderHuidigeBeurt());
+        verify(machineLearningInterface).kenRewardToeVoorGespeeldeKaart(beurt, teSpelenKaartBepaaldDoorMachine, 41);
     }
 }
