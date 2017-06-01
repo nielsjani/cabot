@@ -13,7 +13,7 @@ public class RewardCalculatorTest extends UnitTest {
 
     @Test
     public void bepaalRewardVoorBotAlsEersteAanZetEnTegenstanderNogGeenKaartGelegd() {
-        Beurt beurt = beurt().withBotHandkaarten(newArrayList(new Kaart(2), new Kaart(1), new Kaart(4), new Kaart(5), new Kaart(3)));
+        Beurt beurt = beurt().withHandkaarten(newArrayList(new Kaart(2), new Kaart(1), new Kaart(4), new Kaart(5), new Kaart(3)));
 
         assertThat(new RewardCalculator().bepaalRewardVoorBotAlsEersteAanZetEnTegenstanderNogGeenKaartGelegd(beurt, new Kaart(5))).isEqualTo(100);
         assertThat(new RewardCalculator().bepaalRewardVoorBotAlsEersteAanZetEnTegenstanderNogGeenKaartGelegd(beurt, new Kaart(4))).isEqualTo(80);
@@ -24,7 +24,7 @@ public class RewardCalculatorTest extends UnitTest {
 
     @Test
     public void bepaalRewardVoorBotAlsEersteAanZetEnTegenstanderNogGeenKaartGelegd_doublesAreIgnoredInCalculations() {
-        Beurt beurt = beurt().withBotHandkaarten(newArrayList(new Kaart(2), new Kaart(3), new Kaart(3), new Kaart(3), new Kaart(1)));
+        Beurt beurt = beurt().withHandkaarten(newArrayList(new Kaart(2), new Kaart(3), new Kaart(3), new Kaart(3), new Kaart(1)));
 
         assertThat(new RewardCalculator().bepaalRewardVoorBotAlsEersteAanZetEnTegenstanderNogGeenKaartGelegd(beurt, new Kaart(3))).isEqualTo(100);
         assertThat(new RewardCalculator().bepaalRewardVoorBotAlsEersteAanZetEnTegenstanderNogGeenKaartGelegd(beurt, new Kaart(2))).isEqualTo(80);
@@ -150,12 +150,12 @@ public class RewardCalculatorTest extends UnitTest {
     }
 
     private Beurt givenTegenstanderSpeeltEerstMetWaarde(int kaartWaarde) {
-        return beurt().withBotMochtAlsEerste(false)
+        return beurt().withIkBegin(false)
                 .withGespeeldeKaartDoorTegenstanderHuidigeBeurt(new Kaart(kaartWaarde));
     }
 
     private Beurt givenTegenstanderSpeeltAlsTweedeMetWaarde(int kaartWaarde) {
-        return beurt().withBotMochtAlsEerste(true)
+        return beurt().withIkBegin(true)
                 .withGespeeldeKaartDoorTegenstanderHuidigeBeurt(new Kaart(kaartWaarde));
     }
 }

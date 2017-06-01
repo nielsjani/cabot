@@ -17,7 +17,7 @@ public class StartSituatieFactoryTest extends UnitTest{
         assertThat(startSituatie.getBotKaarten().size())
                 .isEqualTo(startSituatie.getMensKaarten().size())
                 .isEqualTo(INITIELE_HAND_GROOTTE);
-        assertThat(startSituatie.isMoetBotBeginnen()).isNotNull();
+        assertThat(startSituatie.isMoetPlayer1Beginnen()).isNotNull();
     }
 
     //In theory this test could fail once every 1000s of runs. Should never fail multiple times in a row, though

@@ -1,8 +1,8 @@
 package com.cegeka.cabot.api;
 
-import com.cegeka.cabot.oorlogje.api.OorlogjeInterface;
 import com.cegeka.cabot.api.beurt.Beurt;
 import com.cegeka.cabot.api.beurt.Kaart;
+import com.cegeka.cabot.oorlogje.api.OorlogjeInterface;
 import com.cegeka.cabot.oorlogje.startsituatie.StartSituatie;
 
 public class GameEngineInterface {
@@ -18,6 +18,6 @@ public class GameEngineInterface {
     }
 
     public void geefRewardVoorBeurtWaarBotMochtBeginnen(Beurt beurt) {
-        gameInterface.geefRewardVoorBeurtWaarBotMochtBeginnen(beurt);
+//        gameInterface.geefRewardVoorBeurt(beurt);
     }
 }

@@ -3,7 +3,7 @@ package com.cegeka.cabot.api;
 import com.cegeka.cabot.api.beurt.Beurt;
 import com.cegeka.cabot.api.beurt.Kaart;
 
-public interface MachineLearningInterface {
+public interface MachineLearningAlgo {
 
     /**
      * Bepaalt een kaart die gespeeld wordt door het ML Algo.
@@ -23,13 +23,14 @@ public interface MachineLearningInterface {
     /**
      * Kent het ML Algo. een reward toe voor de kaart die het bepaald heeft
      * te spelen. Hoe hoger de reward, hoe beter de gespeelde kaart was.
-     * @param beurt
+     * @param fromBeurt
      *        zie hierboven
+     * @param toBeurt
      * @param gespeeldDoorMLAlgo
      *        zie hierboven
      * @param reward
      *        De reward, bepaald door de game-engine, die het ML Algo. krijgt voor zijn
      *        gespeelde kaart.
      */
-    void kenRewardToeVoorGespeeldeKaart(Beurt beurt, Kaart gespeeldDoorMLAlgo, int reward);
+    void kenRewardToeVoorGespeeldeKaart(Beurt fromBeurt, Beurt toBeurt, Kaart gespeeldDoorMLAlgo, int reward);
 }

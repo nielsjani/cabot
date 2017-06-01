@@ -5,12 +5,12 @@ import java.util.List;
 import static com.google.common.collect.Lists.newArrayList;
 
 public class Beurt {
-    private List<Kaart> botHandkaarten = newArrayList();
-    private List<Kaart> botGespeeldeKaarten = newArrayList();
-    private List<Kaart> mensGespeeldeKaarten = newArrayList();
+    private List<Kaart> handkaarten = newArrayList();
+    private List<Kaart> gespeeldeKaarten = newArrayList();
+    private List<Kaart> tegenstanderGespeeldeKaarten = newArrayList();
     private Kaart gespeeldeKaartDoorTegenstanderHuidigeBeurt;
-    private Kaart gespeeldeKaartDoorBotHuidigeBeurt;
-    private boolean botMochtAlsEerste;
+    private Kaart gespeeldeKaartHuidigeBeurt;
+    private boolean ikBegin;
 
     private Beurt(){}
 
@@ -18,18 +18,18 @@ public class Beurt {
         return new Beurt();
     }
 
-    public Beurt withBotHandkaarten(List<Kaart> botHandkaarten) {
-        this.botHandkaarten = botHandkaarten;
+    public Beurt withHandkaarten(List<Kaart> handkaarten) {
+        this.handkaarten = handkaarten;
         return this;
     }
 
-    public Beurt withBotGespeeldeKaarten(List<Kaart> botGespeeldeKaarten) {
-        this.botGespeeldeKaarten = botGespeeldeKaarten;
+    public Beurt withGespeeldeKaarten(List<Kaart> gespeeldeKaarten) {
+        this.gespeeldeKaarten = gespeeldeKaarten;
         return this;
     }
 
-    public Beurt withMensGespeeldeKaarten(List<Kaart> mensGespeeldeKaarten) {
-        this.mensGespeeldeKaarten = mensGespeeldeKaarten;
+    public Beurt withTegenstanderGespeeldeKaarten(List<Kaart> tegenstanderGespeeldeKaarten) {
+        this.tegenstanderGespeeldeKaarten = tegenstanderGespeeldeKaarten;
         return this;
     }
 
@@ -38,37 +38,47 @@ public class Beurt {
         return this;
     }
 
-    public Beurt withBotMochtAlsEerste(boolean botMochtAlsEerste) {
-        this.botMochtAlsEerste = botMochtAlsEerste;
+    public Beurt withIkBegin(boolean ikBegin) {
+        this.ikBegin = ikBegin;
         return this;
     }
 
-    public Beurt withGespeeldeKaartDoorBotHuidigeBeurt(Kaart gespeeldeKaartDoorBotHuidigeBeurt) {
-        this.gespeeldeKaartDoorBotHuidigeBeurt = gespeeldeKaartDoorBotHuidigeBeurt;
+    public Beurt withGespeeldeKaartHuidigeBeurt(Kaart gespeeldeKaartHuidigeBeurt) {
+        this.gespeeldeKaartHuidigeBeurt = gespeeldeKaartHuidigeBeurt;
         return this;
     }
 
-    public Kaart getGespeeldeKaartDoorBotHuidigeBeurt() {
-        return gespeeldeKaartDoorBotHuidigeBeurt;
+    public Kaart getGespeeldeKaartHuidigeBeurt() {
+        return gespeeldeKaartHuidigeBeurt;
     }
 
-    public List<Kaart> getBotHandkaarten() {
-        return botHandkaarten;
+    public List<Kaart> getHandkaarten() {
+        return handkaarten;
     }
 
-    public List<Kaart> getBotGespeeldeKaarten() {
-        return botGespeeldeKaarten;
+    public List<Kaart> getGespeeldeKaarten() {
+        return gespeeldeKaarten;
     }
 
-    public List<Kaart> getMensGespeeldeKaarten() {
-        return mensGespeeldeKaarten;
+    public List<Kaart> getTegenstanderGespeeldeKaarten() {
+        return tegenstanderGespeeldeKaarten;
     }
 
     public Kaart getGespeeldeKaartDoorTegenstanderHuidigeBeurt() {
         return gespeeldeKaartDoorTegenstanderHuidigeBeurt;
     }
 
-    public boolean isBotMochtAlsEerste() {
-        return botMochtAlsEerste;
+    public boolean isIkBegin() {
+        return ikBegin;
+    }
+
+    public Beurt clone() {
+        return new Beurt()
+                .withHandkaarten(newArrayList(handkaarten))
+                .withGespeeldeKaarten(newArrayList(gespeeldeKaarten))
+                .withTegenstanderGespeeldeKaarten(newArrayList(tegenstanderGespeeldeKaarten))
+                .withGespeeldeKaartHuidigeBeurt(gespeeldeKaartHuidigeBeurt)
+                .withGespeeldeKaartDoorTegenstanderHuidigeBeurt(gespeeldeKaartDoorTegenstanderHuidigeBeurt)
+                .withIkBegin(ikBegin);
     }
 }

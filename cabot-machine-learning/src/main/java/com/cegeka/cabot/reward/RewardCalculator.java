@@ -11,7 +11,7 @@ import static com.google.common.collect.Sets.newHashSet;
 public class RewardCalculator {
 
     public int bepaalRewardVoorBotAlsEersteAanZetEnTegenstanderNogGeenKaartGelegd(Beurt beurt,Kaart gespeeldeKaartDoorBot){
-        List<Kaart> uniekeBotHandkaartenHoogsteEerst = removeDubbels(beurt.getBotHandkaarten());
+        List<Kaart> uniekeBotHandkaartenHoogsteEerst = removeDubbels(beurt.getHandkaarten());
         List<Kaart> botHandkaartenHoogsteEerst = sortBotKaarten(uniekeBotHandkaartenHoogsteEerst);
         return 100 - (botHandkaartenHoogsteEerst.indexOf(gespeeldeKaartDoorBot)*20);
     }
@@ -49,16 +49,16 @@ public class RewardCalculator {
     }
 
     private boolean botMochtNietBeginnenEnZijnKaartIsHogerDanDieVanDeTegenstander(Beurt beurt, Kaart gespeeldeKaartDoorBot) {
-        return !beurt.isBotMochtAlsEerste() && beurt.getGespeeldeKaartDoorTegenstanderHuidigeBeurt().getWaarde() < gespeeldeKaartDoorBot.getWaarde();
+        return !beurt.isIkBegin() && beurt.getGespeeldeKaartDoorTegenstanderHuidigeBeurt().getWaarde() < gespeeldeKaartDoorBot.getWaarde();
     }
 
     private boolean botMochtBeginnenEnZijnKaartIsMinstensEvenHoogAlsDieVanDeTegenstander(Beurt beurt, Kaart gespeeldeKaartDoorBot) {
-        return beurt.isBotMochtAlsEerste() && beurt.getGespeeldeKaartDoorTegenstanderHuidigeBeurt().getWaarde() <= gespeeldeKaartDoorBot.getWaarde();
+        return beurt.isIkBegin() && beurt.getGespeeldeKaartDoorTegenstanderHuidigeBeurt().getWaarde() <= gespeeldeKaartDoorBot.getWaarde();
     }
 
     private int berekenRewardVoorGewonnen(Beurt beurt, Kaart gespeeldeKaartDoorBot) {
         int verschilInWaardeTussenTweeKaarten = gespeeldeKaartDoorBot.getWaarde() - beurt.getGespeeldeKaartDoorTegenstanderHuidigeBeurt().getWaarde();
-        if(beurt.isBotMochtAlsEerste()){
+        if(beurt.isIkBegin()){
             return 100 - (verschilInWaardeTussenTweeKaarten*20);
         } else {
             return 100 - ((verschilInWaardeTussenTweeKaarten-1)*20);
@@ -67,7 +67,7 @@ public class RewardCalculator {
 
     private int berekenRewardVoorVerloren(Beurt beurt, Kaart gespeeldeKaartDoorBot) {
         int verschilInWaardeTussenTweeKaarten =  beurt.getGespeeldeKaartDoorTegenstanderHuidigeBeurt().getWaarde() - gespeeldeKaartDoorBot.getWaarde();
-        if(beurt.isBotMochtAlsEerste()) {
+        if(beurt.isIkBegin()) {
             return -100 + ((verschilInWaardeTussenTweeKaarten-1)*20);
         } else {
             return -100 + (verschilInWaardeTussenTweeKaarten*20);

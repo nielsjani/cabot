@@ -24,15 +24,15 @@ public class StartSituatie {
         return mensKaarten;
     }
 
-    public List<Kaart> getBotKaartenAsKaart(){
+    public List<Kaart> getPlayer1KaartenAsKaart(){
         return botKaarten.stream().map(botkaart-> new Kaart(botkaart.getWaarde())).collect(Collectors.toList());
     }
 
-    public List<Kaart> getMensKaartenAsKaart(){
+    public List<Kaart> getPlayer2KaartenAsKaart(){
         return mensKaarten.stream().map(menskaart-> new Kaart(menskaart.getWaarde())).collect(Collectors.toList());
     }
 
-    public boolean isMoetBotBeginnen() {
+    public boolean isMoetPlayer1Beginnen() {
         return moetBotBeginnen;
     }
 }
