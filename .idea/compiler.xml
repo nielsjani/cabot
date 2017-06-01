@@ -8,12 +8,14 @@
         <outputRelativeToContentRoot value="true" />
         <module name="cabot-game-engine" />
         <module name="cabot-machine-learning" />
+        <module name="cabot-ui" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="cabot" target="1.8" />
       <module name="cabot-game-engine" target="1.8" />
       <module name="cabot-machine-learning" target="1.8" />
+      <module name="cabot-ui" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

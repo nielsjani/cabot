@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/cabot.iml" filepath="$PROJECT_DIR$/cabot.iml" />
       <module fileurl="file://$PROJECT_DIR$/cabot-game-engine/cabot-game-engine.iml" filepath="$PROJECT_DIR$/cabot-game-engine/cabot-game-engine.iml" />
       <module fileurl="file://$PROJECT_DIR$/cabot-machine-learning/cabot-machine-learning.iml" filepath="$PROJECT_DIR$/cabot-machine-learning/cabot-machine-learning.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cabot-ui/cabot-ui.iml" filepath="$PROJECT_DIR$/cabot-ui/cabot-ui.iml" />
     </modules>
   </component>
 </project>
