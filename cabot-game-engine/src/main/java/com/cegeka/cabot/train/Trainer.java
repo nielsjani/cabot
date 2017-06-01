@@ -6,12 +6,10 @@ import com.cegeka.cabot.api.beurt.Beurt;
 import com.cegeka.cabot.api.beurt.Kaart;
 import com.cegeka.cabot.oorlogje.api.OorlogjeInterface;
 import com.cegeka.cabot.oorlogje.startsituatie.StartSituatie;
-import org.apache.commons.lang3.tuple.Pair;
 
 public class Trainer {
 
-    private int player1AantalWins = 0;
-    private int player2AantalWins = 0;
+    private TotalScores totalScores = new TotalScores();
     private int player1Punten = 0;
     private int player2Punten = 0;
     private MachineLearningAlgo player1;
@@ -22,23 +20,31 @@ public class Trainer {
         this.player2 = player2;
     }
 
-    public Pair<Integer, Integer> start(int numberOfGames) {
+    public TotalScores start(int numberOfGames) {
         for (int i = 0; i <= numberOfGames; i++) {
 //            System.out.println("Start playing game " + i);
-            playGame();
+            boolean player1MochtBeginnen = playGame();
             if (player1Punten > player2Punten) {
-                player1AantalWins++;
+                if (player1MochtBeginnen) {
+                    totalScores.player1AantalWinsBegint++;
+                } else {
+                    totalScores.player1AantalWinsBegintNiet++;
+                }
             } else {
-                player2AantalWins++;
+                if (player1MochtBeginnen) {
+                    totalScores.player2AantalWinsBegintNiet++;
+                } else {
+                    totalScores.player2AantalWinsBegint++;
+                }
             }
             player1Punten = 0;
             player2Punten = 0;
 //            System.out.println("Ended playing game " + i);
         }
-        return Pair.of(player1AantalWins, player2AantalWins);
+        return totalScores;
     }
 
-    private void playGame() {
+    private boolean playGame() {
         StartSituatie startSituatie = new GameEngineInterface().getStartSituatie();
 
         OorlogjeInterface oorlogjeInterfacePlayer1 = new OorlogjeInterface(player1);
@@ -53,6 +59,7 @@ public class Trainer {
         while (player1Punten < 3 && player2Punten < 3) {
             performTurn(oorlogjeInterfacePlayer1, oorlogjeInterfacePlayer2, player1Beurt, player2Beurt);
         }
+        return startSituatie.isMoetPlayer1Beginnen();
     }
 
     private void performTurn(OorlogjeInterface oorlogjeInterfacePlayer1, OorlogjeInterface oorlogjeInterfacePlayer2, Beurt player1Beurt, Beurt player2Beurt) {

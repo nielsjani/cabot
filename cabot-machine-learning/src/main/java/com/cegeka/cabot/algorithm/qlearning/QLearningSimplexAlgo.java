@@ -19,7 +19,7 @@ public class QLearningSimplexAlgo implements MachineLearningSimplexAlgo {
      * “myopic” (or short-sighted) by only considering current rewards, while a factor approaching 1 will make it
      * strive for a long-term high reward.
      */
-    private static final float GAMMA = 0.1f;
+    private static final float GAMMA = 0.9f;
 
     private boolean inLearningMode = true;
     private QMatrix qMatrix = new QMatrix();
