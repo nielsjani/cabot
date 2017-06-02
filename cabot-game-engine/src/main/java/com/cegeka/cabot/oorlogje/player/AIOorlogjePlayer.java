@@ -19,6 +19,11 @@ public class AIOorlogjePlayer implements OorlogjePlayer {
     }
 
     @Override
+    public String name() {
+        return "AIOorlogjePlayer";
+    }
+
+    @Override
     public Kaart bepaalActieOmTeSpelen(Beurt beurt, Set<Kaart> toegelatenActies) {
         return new Kaart(simplexAlgo.bepaalActie(AIGameStateConverter.toStateValue(beurt), AIGameStateConverter.toActionValues(toegelatenActies)));
     }

@@ -8,4 +8,6 @@ public interface AIGameStateConverter<State, Actie> {
 
     Set<Integer> toActionValues(Set<Actie> acties);
 
+    Integer toActionValue(Actie actie);
+
 }

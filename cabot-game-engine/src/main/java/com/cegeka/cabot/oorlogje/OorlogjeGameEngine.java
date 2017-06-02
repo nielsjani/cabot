@@ -13,11 +13,13 @@ public class OorlogjeGameEngine extends GameEngine<OorlogjePlayer> {
     }
 
     @Override
-    protected boolean playGame(OorlogjePlayer player1, OorlogjePlayer player2) {
+    protected GameResult playGame(OorlogjePlayer player1, OorlogjePlayer player2) {
         StartSituatie startSituatie = new GameEngineInterface().getStartSituatie();
 
         OorlogjeInterface oorlogjeInterfacePlayer1 = new OorlogjeInterface(player1);
         OorlogjeInterface oorlogjeInterfacePlayer2 = new OorlogjeInterface(player2);
+
+        GameResult gameResult = new GameResult(startSituatie.isMoetPlayer1Beginnen());
 
         Beurt player1Beurt = Beurt.beurt()
                 .withIkBegin(startSituatie.isMoetPlayer1Beginnen())
@@ -25,13 +27,13 @@ public class OorlogjeGameEngine extends GameEngine<OorlogjePlayer> {
         Beurt player2Beurt = Beurt.beurt()
                 .withIkBegin(!startSituatie.isMoetPlayer1Beginnen())
                 .withHandkaarten(startSituatie.getPlayer2KaartenAsKaart());
-        while (player1Punten < 3 && player2Punten < 3) {
-            performTurn(oorlogjeInterfacePlayer1, oorlogjeInterfacePlayer2, player1Beurt, player2Beurt);
+        while (gameResult.getPlayer1Punten() < 3 && gameResult.getPlayer2Punten() < 3) {
+            performTurn(oorlogjeInterfacePlayer1, oorlogjeInterfacePlayer2, player1Beurt, player2Beurt, gameResult);
         }
-        return startSituatie.isMoetPlayer1Beginnen();
+        return gameResult;
     }
 
-    private void performTurn(OorlogjeInterface oorlogjeInterfacePlayer1, OorlogjeInterface oorlogjeInterfacePlayer2, Beurt player1Beurt, Beurt player2Beurt) {
+    private void performTurn(OorlogjeInterface oorlogjeInterfacePlayer1, OorlogjeInterface oorlogjeInterfacePlayer2, Beurt player1Beurt, Beurt player2Beurt, GameResult gameResult) {
         Beurt player1StateVoorBeurt;
         Beurt player2StateVoorBeurt;
         if (player1Beurt.isIkBegin()) {
@@ -51,9 +53,9 @@ public class OorlogjeGameEngine extends GameEngine<OorlogjePlayer> {
         boolean isPlayer1Gewonnen = player1Gewonnen(player1Beurt);
 
         if (isPlayer1Gewonnen) {
-            player1Punten = player1Punten + 1;
+            gameResult.addPlayer1Punten(1);
         } else {
-            player2Punten = player2Punten + 1;
+            gameResult.addPlayer2Punten(1);
         }
 
         resetBeurt(player1Beurt, isPlayer1Gewonnen);
