@@ -317,6 +317,7 @@ public class UiController {
                 rightPane.getChildren().remove(scannedKaartLabel);
                 rightPane.getChildren().add(scannedKaartLabel);
                 rightPane.getChildren().remove(cardScannedCorrectButton);
+                leftPane.getChildren().add(new ImageView("http://rl337.org/wp-content/uploads/2012/07/ai-terminator.jpg"));
                 leftPane.getChildren().add(new Label("Score"));
                 scoreboardLabel = new Label(createScoreLabel());
                 leftPane.getChildren().add(scoreboardLabel);
