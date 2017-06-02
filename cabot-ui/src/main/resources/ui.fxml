@@ -11,7 +11,7 @@
     </left>
     <right>
         <VBox alignment="CENTER" spacing="10" fx:id="rightPane">
-            <Button fx:id="fetchStartingHandsButton" alignment="center" text="Fetch starting hands"
+            <Button fx:id="fetchStartingHandsButton" alignment="center" text="Start game"
                     onAction="#fetchHands"/>
         </VBox>
     </right>

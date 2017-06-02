@@ -118,13 +118,11 @@ public class UiController {
             // fall thru, it means there is no QR code in image
         }
         if (result != null) {
-            System.out.println("Found:");
-            System.out.println(result.getText());
+//            System.out.println("Found:");
+//            System.out.println(result.getText());
             this.scannedKaart = new Kaart(Integer.parseInt(result.getText()));
             Result finalResult = result;
-            Platform.runLater(() -> {
-                scannedKaartLabel.textProperty().set("Card found: " + finalResult.getText());
-            });
+            Platform.runLater(() -> scannedKaartLabel.textProperty().set("Card found: " + finalResult.getText()));
         }
     }
 
@@ -203,10 +201,9 @@ public class UiController {
     private EventHandler<ActionEvent> confirmBotPlayScan() {
         return event -> {
             if (isBeurtOver()) {
-                System.out.println("Beurt over");
                 handleBeurtOver();
             } else {
-                this.botAanZet = !this.botAanZet;
+                this.botAanZet = false;
                 this.switchScanCardButtons();
             }
         };
@@ -215,14 +212,15 @@ public class UiController {
     private EventHandler<ActionEvent> confirmHumanPlayScan() {
         return event -> {
             this.beurt.withGespeeldeKaartDoorTegenstanderHuidigeBeurt(scannedKaart);
+            this.beurt.getTegenstanderGespeeldeKaarten().add(scannedKaart);
             if (isBeurtOver()) {
-                System.out.println("Beurt over");
                 handleBeurtOver();
             } else {
-                this.botAanZet = !this.botAanZet;
-                Kaart kaart = this.gameEngineInterface.bepaalTeSpelenKaart(beurt);
-                beurt.withGespeeldeKaartHuidigeBeurt(kaart);
-                System.out.println("Play card with value: " + kaart.getWaarde());
+                this.botAanZet = true;
+                bepaalBotkaartAlsAanZet();
+//                Kaart kaart = this.gameEngineInterface.bepaalTeSpelenKaart(beurt);
+//                beurt.withGespeeldeKaartHuidigeBeurt(kaart);
+//                System.out.println("Play card with value: " + kaart.getWaarde());
                 handleBeurtOver();
             }
             //IF BEURT GEDAAN-> bepaal winnaar en zet buttons en alles correct + reset beurt gespeeldekaarten huidige beurt + bepaal starter volgende beurt
@@ -231,10 +229,22 @@ public class UiController {
     }
 
     private void handleBeurtOver() {
+        System.out.println("Beurt over");
         bepaalWinnaar();
         updateLabels();
         resetBeurt();
         switchScanCardButtons();
+        bepaalBotkaartAlsAanZet();
+    }
+
+    private void bepaalBotkaartAlsAanZet() {
+        if(botAanZet){
+            Kaart kaart = this.gameEngineInterface.bepaalTeSpelenKaart(beurt);
+            beurt.withGespeeldeKaartHuidigeBeurt(kaart);
+            beurt.getGespeeldeKaarten().add(kaart);
+            beurt.getHandkaarten().remove(kaart);
+            System.out.println("Play card with value: " + kaart.getWaarde());
+        }
     }
 
     private void updateLabels() {
@@ -325,6 +335,7 @@ public class UiController {
 
     private EventHandler<ActionEvent> startScanningBotHandCards() {
         return event -> {
+            System.out.println("Hello?");
             rightPane.getChildren().remove(startingPlayerLabel);
             rightPane.getChildren().remove(startPlayerLabel2);
             rightPane.getChildren().remove(startScanningBotHandButton);
@@ -334,7 +345,7 @@ public class UiController {
         };
     }
 
-    public void fetchHands(ActionEvent actionEvent) {
+    public void fetchHands() {
         StartSituatie startSituatie = gameEngineInterface.getStartSituatie();
         this.beurt = beurt()
                 .withIkBegin(startSituatie.isMoetPlayer1Beginnen());
@@ -343,11 +354,12 @@ public class UiController {
         startSituatie.getBotKaarten().forEach(botkaart -> System.out.println(botkaart.forUi()));
         System.out.println("Human cards:");
         startSituatie.getMensKaarten().forEach(menskaart -> System.out.println(menskaart.forUi()));
-        startingPlayerLabel = new Label("Starting player:");
-        this.rightPane.getChildren().add(startingPlayerLabel);
-        startPlayerLabel2 = new Label(startSituatie.isMoetPlayer1Beginnen() ? "Glorious Bot plays first" : "Pitiful human starts");
-        this.rightPane.getChildren().add(startPlayerLabel2);
+//        startingPlayerLabel = new Label("Starting player:");
+//        this.rightPane.getChildren().add(startingPlayerLabel);
+//        startPlayerLabel2 = new Label(startSituatie.isMoetPlayer1Beginnen() ? "Glorious Bot plays first" : "Pitiful human starts");
+//        this.rightPane.getChildren().add(startPlayerLabel2);
         this.rightPane.getChildren().add(startScanningBotHandButton);
+//        startScanningBotHandCards();
 
     }
 }
