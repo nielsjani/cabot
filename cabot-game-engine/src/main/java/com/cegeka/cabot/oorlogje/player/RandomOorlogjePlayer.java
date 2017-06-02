@@ -3,6 +3,7 @@ package com.cegeka.cabot.oorlogje.player;
 import com.cegeka.cabot.oorlogje.state.Beurt;
 import com.cegeka.cabot.oorlogje.state.Kaart;
 
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -13,7 +14,7 @@ public class RandomOorlogjePlayer implements OorlogjePlayer {
 
     @Override
     public Kaart bepaalActieOmTeSpelen(Beurt beurt, Set<Kaart> toegelatenActies) {
-        return toegelatenActies.iterator().next();
+        return toegelatenActies.toArray(new Kaart[toegelatenActies.size()])[new Random().nextInt(toegelatenActies.size())];
     }
 
     @Override
