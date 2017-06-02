@@ -1,53 +1,19 @@
 package com.cegeka.cabot.oorlogje;
 
 import com.cegeka.cabot.api.GameEngine;
-import com.cegeka.cabot.api.TotalScores;
 import com.cegeka.cabot.oorlogje.api.OorlogjeInterface;
 import com.cegeka.cabot.oorlogje.player.OorlogjePlayer;
 import com.cegeka.cabot.oorlogje.startsituatie.StartSituatie;
 import com.cegeka.cabot.oorlogje.state.Beurt;
 import com.cegeka.cabot.oorlogje.state.Kaart;
 
-public class OorlogjeGameEngine implements GameEngine<OorlogjePlayer> {
-
-    private TotalScores totalScores = new TotalScores();
-    private int player1Punten = 0;
-    private int player2Punten = 0;
+public class OorlogjeGameEngine extends GameEngine<OorlogjePlayer> {
 
     public OorlogjeGameEngine() {
     }
 
     @Override
-    public TotalScores start(int numberOfGames, OorlogjePlayer player1, OorlogjePlayer player2) {
-        resetScores();
-        for (int i = 0; i <= numberOfGames; i++) {
-            boolean player1MochtBeginnen = playGame(player1, player2);
-            if (player1Punten > player2Punten) {
-                if (player1MochtBeginnen) {
-                    totalScores.player1AantalWinsBegint++;
-                } else {
-                    totalScores.player1AantalWinsBegintNiet++;
-                }
-            } else {
-                if (player1MochtBeginnen) {
-                    totalScores.player2AantalWinsBegintNiet++;
-                } else {
-                    totalScores.player2AantalWinsBegint++;
-                }
-            }
-            player1Punten = 0;
-            player2Punten = 0;
-        }
-        return totalScores;
-    }
-
-    private void resetScores() {
-        totalScores = new TotalScores();
-        player1Punten = 0;
-        player2Punten = 0;
-    }
-
-    private boolean playGame(OorlogjePlayer player1, OorlogjePlayer player2) {
+    protected boolean playGame(OorlogjePlayer player1, OorlogjePlayer player2) {
         StartSituatie startSituatie = new GameEngineInterface().getStartSituatie();
 
         OorlogjeInterface oorlogjeInterfacePlayer1 = new OorlogjeInterface(player1);
