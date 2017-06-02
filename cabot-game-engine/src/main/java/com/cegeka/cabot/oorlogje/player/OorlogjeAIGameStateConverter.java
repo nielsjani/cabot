@@ -26,6 +26,11 @@ public class OorlogjeAIGameStateConverter implements AIGameStateConverter<Beurt,
         return toegelatenTeSpelenKaarten.stream().map(Kaart::getWaarde).collect(toSet());
     }
 
+    @Override
+    public Integer toActionValue(Kaart kaart) {
+        return kaart.getWaarde();
+    }
+
     private static List<Integer> createState(Beurt beurt) {
         List<Integer> kaartenInHandGesorteerd = beurt.getHandkaarten().stream().map(Kaart::getWaarde).sorted(comparingInt(k -> k)).collect(Collectors.toList());
         voegGespeeldeKaartDoorTegenstanderToeAanEindeVanHand(beurt.getGespeeldeKaartDoorTegenstanderHuidigeBeurt(), kaartenInHandGesorteerd);
@@ -51,14 +56,18 @@ public class OorlogjeAIGameStateConverter implements AIGameStateConverter<Beurt,
     private static int createUniqueRepresentationForState(List<Integer> state) {
         List<Integer> handCountPlusCards = newArrayList(state.size()-1);
         handCountPlusCards.addAll(state);
-        return IntStream.range(0, handCountPlusCards.size())
-                .mapToObj(i -> Pair.of(handCountPlusCards.get(i), i))
-                .mapToInt(valueAndIndex ->  Double.valueOf(valueAndIndex.getLeft() * Math.pow(10, (handCountPlusCards.size() - 1 - valueAndIndex.getRight()))).intValue())
-                .sum()
+        return concatIntegerListIntoInt(handCountPlusCards)
         ;
 //        return parseInt(String.format("%s%s",
 //                state.size()-1,
 //                state.stream().map(Object::toString).collect(Collectors.joining())));
+    }
+
+    private static int concatIntegerListIntoInt(List<Integer> handCountPlusCards) {
+        return IntStream.range(0, handCountPlusCards.size())
+                .mapToObj(i -> Pair.of(handCountPlusCards.get(i), i))
+                .mapToInt(valueAndIndex ->  Double.valueOf(valueAndIndex.getLeft() * Math.pow(10, (handCountPlusCards.size() - 1 - valueAndIndex.getRight()))).intValue())
+                .sum();
     }
 
 }

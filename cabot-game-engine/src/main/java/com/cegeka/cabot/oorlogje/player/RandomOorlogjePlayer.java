@@ -13,6 +13,11 @@ import java.util.Set;
 public class RandomOorlogjePlayer implements OorlogjePlayer {
 
     @Override
+    public String name() {
+        return "RandomOorlogjePlayer";
+    }
+
+    @Override
     public Kaart bepaalActieOmTeSpelen(Beurt beurt, Set<Kaart> toegelatenActies) {
         return toegelatenActies.toArray(new Kaart[toegelatenActies.size()])[new Random().nextInt(toegelatenActies.size())];
     }

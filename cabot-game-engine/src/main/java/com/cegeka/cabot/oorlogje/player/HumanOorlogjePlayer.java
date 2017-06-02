@@ -11,6 +11,11 @@ import java.util.stream.Collectors;
 public class HumanOorlogjePlayer implements OorlogjePlayer {
 
     @Override
+    public String name() {
+        return "Human";
+    }
+
+    @Override
     public Kaart bepaalActieOmTeSpelen(Beurt beurt, Set<Kaart> toegelatenActies) {
         toonNieuwSpelIndienNodig(beurt.getHandkaarten());
         toonHuidigeSituatie(beurt);

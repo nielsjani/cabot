@@ -29,12 +29,17 @@ public class QLearningSimplexAlgo implements MachineLearningSimplexAlgo {
         if (inLearningMode) {
             return getRandomValueFromSet(mogelijkeActies);
         }
-        return mogelijkeActies.stream()
+        Pair<Integer, Double> gekozenPair = mogelijkeActies.stream()
                 .map(actie -> Pair.of(actie, qMatrix.getQValue(Pair.of(state, actie))))
-                .reduce(Pair.of(0, Double.MIN_VALUE), (p1, p2) -> {
+                .reduce(Pair.of(0, Double.NEGATIVE_INFINITY), (p1, p2) -> {
                     if (p1.getRight() > p2.getRight()) return p1;
                     return p2;
-                }).getLeft();
+                });
+        Integer gekozenActie = gekozenPair.getLeft();
+        if (!mogelijkeActies.contains(gekozenActie)) {
+            throw new RuntimeException("Actie " + gekozenActie + " is niet toegelaten in state " + state);
+        }
+        return gekozenActie;
     }
 
     @Override
@@ -60,8 +65,8 @@ public class QLearningSimplexAlgo implements MachineLearningSimplexAlgo {
         return intSet.toArray(new Integer[intSet.size()])[new Random().nextInt(intSet.size())];
     }
 
-    public QLearningSimplexAlgo setInLearningMode(boolean inLearningMode) {
+    @Override
+    public void setInLearningMode(boolean inLearningMode) {
         this.inLearningMode = inLearningMode;
-        return this;
     }
 }
