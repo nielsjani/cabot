@@ -1,6 +1,7 @@
 package com.cegeka.cabot;
 
 import com.cegeka.cabot.oorlogje.GameEngineInterface;
+import com.cegeka.cabot.oorlogje.api.OorlogjeInterface;
 import com.cegeka.cabot.oorlogje.reward.RewardCalculator;
 import com.cegeka.cabot.oorlogje.startsituatie.StartSituatie;
 import com.cegeka.cabot.oorlogje.state.Beurt;
@@ -32,6 +33,7 @@ import static com.cegeka.cabot.oorlogje.state.Beurt.beurt;
 public class UiController {
 
     private GameEngineInterface gameEngineInterface;
+    private OorlogjeInterface oorlogjeInterface;
 
     @FXML
     private VBox rightPane;
@@ -183,6 +185,7 @@ public class UiController {
 
     public UiController() {
         this.gameEngineInterface = new GameEngineInterface();
+        oorlogjeInterface = new OorlogjeInterface();
         startScanningBotHandButton = new Button("Start scanning cards");
         startScanningBotHandButton.setOnAction(startScanningBotHandCards());
 
@@ -239,7 +242,7 @@ public class UiController {
 
     private void bepaalBotkaartAlsAanZet() {
         if(botAanZet){
-            Kaart kaart = this.gameEngineInterface.bepaalTeSpelenKaart(beurt);
+            Kaart kaart = this.oorlogjeInterface.bepaalTeSpelenKaart(beurt);
             beurt.withGespeeldeKaartHuidigeBeurt(kaart);
             beurt.getGespeeldeKaarten().add(kaart);
             beurt.getHandkaarten().remove(kaart);
@@ -304,7 +307,7 @@ public class UiController {
                 leftPane.getChildren().add(wieIsAanBeurtLabel);
                 this.botAanZet = this.beurt.isIkBegin();
                 if (botAanZet) {
-                    Kaart kaart = gameEngineInterface.bepaalTeSpelenKaart(beurt);
+                    Kaart kaart = oorlogjeInterface.bepaalTeSpelenKaart(beurt);
                     beurt.withGespeeldeKaartHuidigeBeurt(kaart);
                     beurt.getGespeeldeKaarten().add(kaart);
                     beurt.getHandkaarten().remove(kaart);
