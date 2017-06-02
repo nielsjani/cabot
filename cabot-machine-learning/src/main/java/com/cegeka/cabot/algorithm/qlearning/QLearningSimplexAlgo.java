@@ -43,7 +43,7 @@ public class QLearningSimplexAlgo implements MachineLearningSimplexAlgo {
     }
 
     @Override
-    public void kenRewardToeVoorGekozenActie(Integer fromState, Integer toState, Integer gekozenActie, Set<Integer> toStatemogelijkeActies, Integer reward) {
+    public void kenRewardToeVoorGekozenActie(Integer fromState, Integer gekozenActie, Integer toState, Set<Integer> toStatemogelijkeActies, Integer reward) {
         if (inLearningMode) {
             Pair<Integer, Integer> fromStateActionPair = Pair.of(fromState, gekozenActie);
             Double oldQValue = qMatrix.getQValue(fromStateActionPair);

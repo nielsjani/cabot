@@ -15,10 +15,18 @@ public class QLearningTicTacToePlayer implements TicTacToePlayer {
 
     private final MachineLearningSimplexAlgo simplexAlgo = new QLearningSimplexAlgo();
     private final AIGameStateConverter<TicTacToeGameState, TicTacToeAction> aiGameStateConverter = new TicTacToeAIGameStateConverter();
+    private String name = "QLearning";
+
+    public QLearningTicTacToePlayer() {
+    }
+
+    public QLearningTicTacToePlayer(String name) {
+        this.name = name;
+    }
 
     @Override
     public String name() {
-        return "QLearning";
+        return name;
     }
 
     @Override
