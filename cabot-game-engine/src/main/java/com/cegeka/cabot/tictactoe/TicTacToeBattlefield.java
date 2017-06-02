@@ -16,7 +16,7 @@ public class TicTacToeBattlefield {
         QLearningTicTacToePlayer qLearningAlgoEnhanced = new QLearningTicTacToePlayer();
 
         TotalScores totalScores = gameEngine
-                .start(1000000, randomTicTacToePlayer, qLearningAlgo);
+                .start(100000, randomTicTacToePlayer, qLearningAlgo);
 
         totalScores.print();
 
@@ -24,7 +24,7 @@ public class TicTacToeBattlefield {
         System.out.println("For reals");
         qLearningAlgo.setInLearningMode(false);
 
-        totalScores = gameEngine.start(10000, randomTicTacToePlayer, qLearningAlgo);
+        totalScores = gameEngine.start(1000, randomTicTacToePlayer, qLearningAlgo);
 
         totalScores.print();
 

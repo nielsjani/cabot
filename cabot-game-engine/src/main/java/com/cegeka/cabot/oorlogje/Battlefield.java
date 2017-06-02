@@ -1,42 +1,38 @@
 package com.cegeka.cabot.oorlogje;
 
-import com.cegeka.cabot.algorithm.qlearning.QLearningSimplexAlgo;
 import com.cegeka.cabot.api.TotalScores;
 import com.cegeka.cabot.oorlogje.player.AIOorlogjePlayer;
 import com.cegeka.cabot.oorlogje.player.HumanOorlogjePlayer;
-import com.cegeka.cabot.oorlogje.player.OorlogjeAIGameStateConverter;
 import com.cegeka.cabot.oorlogje.player.RandomOorlogjePlayer;
 
 public class Battlefield {
 
     public static void main(String[] args) {
-        // demoMachineLearning();
+//         demoMachineLearning();
         // humanVSRandom();
         humanVSEnhanced();
+//        trainMe(new AIOorlogjePlayer("TrainedBot"));
     }
 
     private static void humanVSEnhanced() {
         System.out.println("Training Fase");
         OorlogjeGameEngine oorlogjeGameEngine = new OorlogjeGameEngine();
 
-        QLearningSimplexAlgo qLearningSimplexAlgo = new QLearningSimplexAlgo();
-        QLearningSimplexAlgo qLearningSimplexAlgoEnhanced = new QLearningSimplexAlgo();
-
         RandomOorlogjePlayer randomOorlogjePlayer = new RandomOorlogjePlayer();
-        AIOorlogjePlayer qLearningAlgo = new AIOorlogjePlayer(qLearningSimplexAlgo, new OorlogjeAIGameStateConverter());
-        AIOorlogjePlayer qLearningAlgoEnhanced = new AIOorlogjePlayer(qLearningSimplexAlgoEnhanced, new OorlogjeAIGameStateConverter());
+        AIOorlogjePlayer qLearningAlgo = new AIOorlogjePlayer();
+        AIOorlogjePlayer qLearningAlgoEnhanced = new AIOorlogjePlayer();
 
         oorlogjeGameEngine
                 .start(100000, randomOorlogjePlayer, qLearningAlgo);
 
         System.out.println();
 
-        qLearningSimplexAlgoEnhanced.setInLearningMode(true);
+        qLearningAlgoEnhanced.setInLearningMode(true);
         System.out.println();
         System.out.println("Enhanced Training");
         oorlogjeGameEngine.start(100000, qLearningAlgoEnhanced, qLearningAlgo);
 
-        qLearningSimplexAlgoEnhanced.setInLearningMode(false);
+        qLearningAlgoEnhanced.setInLearningMode(false);
 
         HumanOorlogjePlayer humanOorlogjePlayer = new HumanOorlogjePlayer();
 
@@ -80,12 +76,9 @@ public class Battlefield {
 
         OorlogjeGameEngine oorlogjeGameEngine = new OorlogjeGameEngine();
 
-        QLearningSimplexAlgo qLearningSimplexAlgo = new QLearningSimplexAlgo();
-        QLearningSimplexAlgo qLearningSimplexAlgoEnhanced = new QLearningSimplexAlgo();
-
         RandomOorlogjePlayer randomOorlogjePlayer = new RandomOorlogjePlayer();
-        AIOorlogjePlayer qLearningAlgo = new AIOorlogjePlayer(qLearningSimplexAlgo, new OorlogjeAIGameStateConverter());
-        AIOorlogjePlayer qLearningAlgoEnhanced = new AIOorlogjePlayer(qLearningSimplexAlgoEnhanced, new OorlogjeAIGameStateConverter());
+        AIOorlogjePlayer qLearningAlgo = new AIOorlogjePlayer();
+        AIOorlogjePlayer qLearningAlgoEnhanced = new AIOorlogjePlayer();
 
         TotalScores totalScores = oorlogjeGameEngine
                 .start(100000, randomOorlogjePlayer, qLearningAlgo);
@@ -97,7 +90,7 @@ public class Battlefield {
 
         System.out.println();
         System.out.println("For reals");
-        qLearningSimplexAlgo.setInLearningMode(false);
+        qLearningAlgo.setInLearningMode(false);
 
         totalScores = oorlogjeGameEngine.start(100000, randomOorlogjePlayer, qLearningAlgo);
 
@@ -124,7 +117,7 @@ public class Battlefield {
         System.out.println("QLearning 1 # wins (begint niet): " + totalScores.player1AantalWinsBegintNiet);
         System.out.println("QLearning 2 # wins (begint): " + totalScores.player2AantalWinsBegint);
 
-        qLearningSimplexAlgoEnhanced.setInLearningMode(false);
+        qLearningAlgoEnhanced.setInLearningMode(false);
 
         System.out.println();
         System.out.println("Enhanced Fight");
@@ -144,4 +137,33 @@ public class Battlefield {
         System.out.println("Random # wins (begint niet): " + totalScores.player1AantalWinsBegintNiet);
         System.out.println("QLearning # wins (begint): " + totalScores.player2AantalWinsBegint);
     }
+
+    public static void trainMe(AIOorlogjePlayer aiOorlogjePlayer) {
+        aiOorlogjePlayer.setInLearningMode(true);
+
+        OorlogjeGameEngine oorlogjeGameEngine = new OorlogjeGameEngine();
+
+        RandomOorlogjePlayer randomOorlogjePlayer = new RandomOorlogjePlayer();
+        AIOorlogjePlayer qLearningAlgo = new AIOorlogjePlayer();
+
+        oorlogjeGameEngine
+                .start(100000, randomOorlogjePlayer, qLearningAlgo);
+
+        qLearningAlgo.setInLearningMode(false);
+
+//        oorlogjeGameEngine.start(100000, randomOorlogjePlayer, aiOorlogjePlayer);
+        oorlogjeGameEngine.start(100000, qLearningAlgo, aiOorlogjePlayer);
+
+        aiOorlogjePlayer.setInLearningMode(false);
+
+        TotalScores totalScores = oorlogjeGameEngine.start(100000, randomOorlogjePlayer, aiOorlogjePlayer);
+        totalScores.print();
+        totalScores = oorlogjeGameEngine.start(100000, qLearningAlgo, aiOorlogjePlayer);
+        totalScores.print();
+
+        System.out.println("Training player " + aiOorlogjePlayer.name());
+        System.out.println("Score tegen " + randomOorlogjePlayer.name() + ":");
+        System.out.println("Score tegen " + qLearningAlgo.name() + ":");
+    }
+
 }
