@@ -29,4 +29,8 @@ public class StartSituatieKaart {
     public boolean equals(Object obj) {
         return EqualsBuilder.reflectionEquals(obj, this);
     }
+
+    public String forUi(){
+        return kaartType.name() + " " + waarde;
+    }
 }
