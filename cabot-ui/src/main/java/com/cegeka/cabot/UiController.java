@@ -1,7 +1,9 @@
 package com.cegeka.cabot;
 
+import com.cegeka.cabot.oorlogje.Battlefield;
 import com.cegeka.cabot.oorlogje.GameEngineInterface;
 import com.cegeka.cabot.oorlogje.api.OorlogjeInterface;
+import com.cegeka.cabot.oorlogje.player.AIOorlogjePlayer;
 import com.cegeka.cabot.oorlogje.reward.RewardCalculator;
 import com.cegeka.cabot.oorlogje.startsituatie.StartSituatie;
 import com.cegeka.cabot.oorlogje.state.Beurt;
@@ -185,7 +187,11 @@ public class UiController {
 
     public UiController() {
         this.gameEngineInterface = new GameEngineInterface();
-        oorlogjeInterface = new OorlogjeInterface();
+
+        AIOorlogjePlayer aiOorlogjePlayer = new AIOorlogjePlayer("Super-trained-qLearning");
+        Battlefield.trainMe(aiOorlogjePlayer);
+
+        oorlogjeInterface = new OorlogjeInterface(aiOorlogjePlayer);
         startScanningBotHandButton = new Button("Start scanning cards");
         startScanningBotHandButton.setOnAction(startScanningBotHandCards());
 

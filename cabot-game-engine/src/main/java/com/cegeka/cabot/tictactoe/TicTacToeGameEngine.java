@@ -22,12 +22,16 @@ public class TicTacToeGameEngine extends GameEngine<TicTacToePlayer> {
         TicTacToePlayer nonActivePlayer = moetPlayer1Beginnen ? player2 : player1;
         TicTacToeGameResult gameResult = TicTacToeGameResult.ONGOING;
 
-        TicTacToeGameState previousGameState;
+        TicTacToeGameState previousGameState = null;
+        TicTacToeGameState nonActivePlayerPreviousGameState = null;
+        TicTacToeGameState nonActivePlayerGameState = null;
+        TicTacToeAction nonActivePlayerPreviouslyPlayedAction = null;
 
         GameResult resultaat = new GameResult(moetPlayer1Beginnen);
         if (verbose) ticTacToeGameState.printGameState();
 
-        int reward = 0;
+        int activePlayerReward = 0;
+        int otherPlayerReward = 0;
         while(!gameResult.isFinishedState()) {
             previousGameState = ticTacToeGameState.clone();
             TicTacToeAction gespeeldeActie = activePlayer.bepaalActieOmTeSpelen(ticTacToeGameState, ticTacToeGameState.getToegelatenActies());
@@ -39,36 +43,43 @@ public class TicTacToeGameEngine extends GameEngine<TicTacToePlayer> {
             if (verbose) ticTacToeGameState.printGameState();
             switch (gameResult) {
                 case ONGOING:
-                    reward = 0;
+                    activePlayerReward = 0;
+                    otherPlayerReward = 0;
                     break;
                 case WINNER:
-                    reward = 100000;
+                    activePlayerReward = 10000;
+                    otherPlayerReward = -10000;
                     if (verbose) System.out.println(activePlayer.name() + " wins!");
                     break;
                 case DRAW:
-                    reward = 10;
+                    activePlayerReward = 100;
+                    otherPlayerReward = 100;
                     if (verbose) System.out.println("Draw!");
                     break;
             }
-            activePlayer.kenRewardToeVoorGespeeldeActie(previousGameState, gespeeldeActie, ticTacToeGameState, ticTacToeGameState.getToegelatenActies(), reward);
-            if (gameResult == DRAW) {
-                nonActivePlayer.kenRewardToeVoorGespeeldeActie(previousGameState, gespeeldeActie, ticTacToeGameState, ticTacToeGameState.getToegelatenActies(), reward);
+            activePlayer.kenRewardToeVoorGespeeldeActie(previousGameState, gespeeldeActie, ticTacToeGameState, ticTacToeGameState.getToegelatenActies(), activePlayerReward);
+            if (nonActivePlayerPreviousGameState != null) {
+                nonActivePlayer.kenRewardToeVoorGespeeldeActie(nonActivePlayerPreviousGameState, nonActivePlayerPreviouslyPlayedAction, nonActivePlayerGameState, nonActivePlayerGameState.getToegelatenActies(), otherPlayerReward);
             }
+
             if (activePlayer == player1) {
                 activePlayer = player2;
                 nonActivePlayer = player1;
-                resultaat.addPlayer1Punten(reward);
+                resultaat.addPlayer1Punten(activePlayerReward);
                 if (gameResult == DRAW) {
-                    resultaat.addPlayer2Punten(reward);
+                    resultaat.addPlayer2Punten(activePlayerReward);
                 }
             } else {
                 activePlayer = player1;
                 nonActivePlayer = player2;
-                resultaat.addPlayer2Punten(reward);
+                resultaat.addPlayer2Punten(activePlayerReward);
                 if (gameResult == DRAW) {
-                    resultaat.addPlayer1Punten(reward);
+                    resultaat.addPlayer1Punten(activePlayerReward);
                 }
             }
+            nonActivePlayerPreviousGameState = previousGameState;
+            nonActivePlayerGameState = ticTacToeGameState.clone();
+            nonActivePlayerPreviouslyPlayedAction = gespeeldeActie;
         }
 
         return resultaat;
