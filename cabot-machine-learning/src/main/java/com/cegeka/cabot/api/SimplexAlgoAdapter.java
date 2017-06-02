@@ -3,8 +3,8 @@ package com.cegeka.cabot.api;
 import com.cegeka.cabot.api.beurt.Beurt;
 import com.cegeka.cabot.api.beurt.Kaart;
 
-import static com.cegeka.cabot.api.beurt.BeurtToAlgoValuesMapper.toPossibleActionValues;
-import static com.cegeka.cabot.api.beurt.BeurtToAlgoValuesMapper.toStateValue;
+import static com.cegeka.cabot.api.mapper.oorlogje.OorlogjeBeurtToAlgoValuesMapper.toPossibleActionValues;
+import static com.cegeka.cabot.api.mapper.oorlogje.OorlogjeBeurtToAlgoValuesMapper.toStateValue;
 
 
 public class SimplexAlgoAdapter implements MachineLearningAlgo {

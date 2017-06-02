@@ -1,5 +1,7 @@
-package com.cegeka.cabot.api.beurt;
+package com.cegeka.cabot.api.mapper.oorlogje;
 
+import com.cegeka.cabot.api.beurt.Beurt;
+import com.cegeka.cabot.api.beurt.Kaart;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
@@ -11,7 +13,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.toSet;
 
-public class BeurtToAlgoValuesMapper {
+public class OorlogjeBeurtToAlgoValuesMapper {
 
     public static Integer toStateValue(Beurt beurt) {
         return createUniqueRepresentationForState(createState(beurt));
@@ -21,12 +23,10 @@ public class BeurtToAlgoValuesMapper {
         return beurt.getHandkaarten().stream().map(Kaart::getWaarde).collect(toSet());
     }
 
-
     private static List<Integer> createState(Beurt beurt) {
         List<Integer> kaartenInHandGesorteerd = beurt.getHandkaarten().stream().map(Kaart::getWaarde).sorted(comparingInt(k -> k)).collect(Collectors.toList());
         voegGespeeldeKaartDoorTegenstanderToeAanEindeVanHand(beurt.getGespeeldeKaartDoorTegenstanderHuidigeBeurt(), kaartenInHandGesorteerd);
         return kaartenInHandGesorteerd;
-
     }
 
     private static void voegGespeeldeKaartDoorTegenstanderToeAanEindeVanHand(Kaart gespeeldDoorTegenstander, List<Integer> kaartenInHandGesorteerd) {
@@ -34,7 +34,6 @@ public class BeurtToAlgoValuesMapper {
             kaartenInHandGesorteerd.add(gespeeldDoorTegenstander.getWaarde());
         }
     }
-
 
     /**
      * Genereert een unieke representatie voor de state

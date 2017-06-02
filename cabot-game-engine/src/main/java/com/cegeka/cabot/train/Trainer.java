@@ -22,7 +22,6 @@ public class Trainer {
 
     public TotalScores start(int numberOfGames) {
         for (int i = 0; i <= numberOfGames; i++) {
-//            System.out.println("Start playing game " + i);
             boolean player1MochtBeginnen = playGame();
             if (player1Punten > player2Punten) {
                 if (player1MochtBeginnen) {
@@ -39,7 +38,6 @@ public class Trainer {
             }
             player1Punten = 0;
             player2Punten = 0;
-//            System.out.println("Ended playing game " + i);
         }
         return totalScores;
     }
@@ -83,12 +81,8 @@ public class Trainer {
 
         if (isPlayer1Gewonnen) {
             player1Punten = player1Punten + 1;
-//            System.out.println("Player 1 won");
-//            System.out.println("Score:" + player1Punten + "-" + player2Punten);
         } else {
             player2Punten = player2Punten + 1;
-//            System.out.println("Player 2 won");
-//            System.out.println("Score:" + player1Punten + "-" + player2Punten);
         }
 
         resetBeurt(player1Beurt, isPlayer1Gewonnen);

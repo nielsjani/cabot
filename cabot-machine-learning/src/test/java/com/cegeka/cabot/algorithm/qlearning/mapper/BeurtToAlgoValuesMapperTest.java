@@ -1,6 +1,9 @@
-package com.cegeka.cabot.api.beurt;
+package com.cegeka.cabot.algorithm.qlearning.mapper;
 
 import com.cegeka.cabot.UnitTest;
+import com.cegeka.cabot.api.beurt.Beurt;
+import com.cegeka.cabot.api.beurt.Kaart;
+import com.cegeka.cabot.api.mapper.oorlogje.OorlogjeBeurtToAlgoValuesMapper;
 import org.junit.Test;
 
 import java.util.Set;
@@ -17,7 +20,7 @@ public class BeurtToAlgoValuesMapperTest extends UnitTest{
                 .withHandkaarten(newArrayList(new Kaart(2), new Kaart(1), new Kaart(4)))
                 .withGespeeldeKaartDoorTegenstanderHuidigeBeurt(new Kaart(5));
 
-        Integer uniqueStateValue = BeurtToAlgoValuesMapper.toStateValue(beurt);
+        Integer uniqueStateValue = OorlogjeBeurtToAlgoValuesMapper.toStateValue(beurt);
 
         assertThat(uniqueStateValue).isEqualTo(31245);
     }
@@ -27,7 +30,7 @@ public class BeurtToAlgoValuesMapperTest extends UnitTest{
         Beurt beurt = beurt()
                 .withHandkaarten(newArrayList(new Kaart(4), new Kaart(2), new Kaart(4)));
 
-        Set<Integer> possibleActionValues = BeurtToAlgoValuesMapper.toPossibleActionValues(beurt);
+        Set<Integer> possibleActionValues = OorlogjeBeurtToAlgoValuesMapper.toPossibleActionValues(beurt);
 
         assertThat(possibleActionValues).containsExactlyInAnyOrder(2, 4);
     }

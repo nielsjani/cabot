@@ -4,9 +4,9 @@ import com.cegeka.cabot.algorithm.baseline.BaseLineAlgo;
 import com.cegeka.cabot.api.MachineLearningAlgo;
 import com.cegeka.cabot.api.beurt.Beurt;
 import com.cegeka.cabot.api.beurt.Kaart;
+import com.cegeka.cabot.oorlogje.reward.RewardCalculator;
 import com.cegeka.cabot.oorlogje.startsituatie.StartSituatie;
 import com.cegeka.cabot.oorlogje.startsituatie.StartSituatieFactory;
-import com.cegeka.cabot.reward.RewardCalculator;
 
 public class OorlogjeInterface {
 

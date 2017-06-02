@@ -1,4 +1,4 @@
-package com.cegeka.cabot.reward;
+package com.cegeka.cabot.oorlogje.reward;
 
 import com.cegeka.cabot.UnitTest;
 import com.cegeka.cabot.api.beurt.Beurt;
@@ -10,6 +10,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RewardCalculatorTest extends UnitTest {
+
 
     @Test
     public void bepaalRewardVoorBotAlsEersteAanZetEnTegenstanderNogGeenKaartGelegd() {
