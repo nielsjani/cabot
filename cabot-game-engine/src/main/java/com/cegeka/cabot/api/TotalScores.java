@@ -42,9 +42,9 @@ public class TotalScores {
         Double pctDraws = ((double) (aantalDrawsPlayer1Begint + aantalDrawsPlayer2Begint)) / getTotalNumberOfGames();
         BigDecimal pct = BigDecimal.valueOf(player1PctWins * 100).setScale(2, BigDecimal.ROUND_HALF_DOWN);
         BigDecimal pctReverse = BigDecimal.valueOf((1 - player1PctWins - pctDraws) * 100).setScale(2, BigDecimal.ROUND_HALF_DOWN);
-        if (player1PctWins > 1.0d)
+        if (player1PctWins >= 1.0d)
             return player1Name + " " + pct + "%";
-        if (player1PctWins < 1.0d)
+        if (player1PctWins <= 1.0d)
             return player2Name + " " + pctReverse + "%";
         return "Gelijkstand!";
     }
