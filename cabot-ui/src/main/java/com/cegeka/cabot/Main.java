@@ -27,7 +27,7 @@ public class Main extends Application {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui.fxml"));
             BorderPane root = loader.load();
             root.setStyle("-fx-background-color: whitesmoke;");
-            Scene scene = new Scene(root, 800, 600);
+            Scene scene = new Scene(root, 1400, 1200);
             scene.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
             primaryStage.setTitle("Object Recognition");
             primaryStage.setScene(scene);

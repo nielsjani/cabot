@@ -43,7 +43,7 @@ public class RewardCalculator {
         }
     }
 
-    private boolean gewonnen(Beurt beurt, Kaart gespeeldeKaartDoorBot) {
+    public boolean gewonnen(Beurt beurt, Kaart gespeeldeKaartDoorBot) {
         return botMochtBeginnenEnZijnKaartIsMinstensEvenHoogAlsDieVanDeTegenstander(beurt, gespeeldeKaartDoorBot)
                 || botMochtNietBeginnenEnZijnKaartIsHogerDanDieVanDeTegenstander(beurt, gespeeldeKaartDoorBot);
     }
