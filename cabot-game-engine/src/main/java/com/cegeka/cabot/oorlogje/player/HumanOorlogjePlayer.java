@@ -29,8 +29,8 @@ public class HumanOorlogjePlayer implements OorlogjePlayer {
 
     @Override
     public void kenRewardToeVoorGespeeldeActie(Beurt fromState, Kaart gespeeldeActieFromState, Beurt toState, Set<Kaart> toegelatenActiesToState, int reward) {
-
-        System.out.println(String.format("De tegenstander speelde %s.", toState.getGespeeldeKaartDoorTegenstanderHuidigeBeurt().getWaarde()));
+        if (fromState.isIkBegin())
+            System.out.println(String.format("De tegenstander speelde %s.", toState.getGespeeldeKaartDoorTegenstanderHuidigeBeurt().getWaarde()));
         if (reward > 0)
             System.out.println("Je wint");
         else

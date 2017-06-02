@@ -43,12 +43,20 @@ public class Battlefield {
         System.out.println();
         System.out.println("Enhanced versus HUMAN PLAYER!!!");
         System.out.println("GAME FASE");
-        TotalScores totalScores = oorlogjeGameEngine.start (9, humanOorlogjePlayer, qLearningAlgoEnhanced);
 
-        System.out.println("Human # wins (begint): " + totalScores.player1AantalWinsBegint);
-        System.out.println("Random # wins (begint niet): " + totalScores.player2AantalWinsBegintNiet);
-        System.out.println("Human # wins (begint niet): " + totalScores.player1AantalWinsBegintNiet);
-        System.out.println("Random # wins (begint): " + totalScores.player2AantalWinsBegint);
+        for (int i = 0; i < 5; i ++) {
+            speelSpelletje(oorlogjeGameEngine, qLearningAlgoEnhanced, humanOorlogjePlayer);
+        }
+    }
+
+    private static void speelSpelletje(OorlogjeGameEngine oorlogjeGameEngine, AIOorlogjePlayer qLearningAlgoEnhanced, HumanOorlogjePlayer humanOorlogjePlayer) {
+        TotalScores totalScores = oorlogjeGameEngine.start (0, humanOorlogjePlayer, qLearningAlgoEnhanced);
+
+        if (totalScores.player1AantalWinsBegint == 0 && totalScores.player1AantalWinsBegintNiet == 0) {
+            System.out.println("You lost the game!");
+        } else {
+            System.out.println("You won the game!");
+        }
     }
 
     private static void humanVSRandom() {
