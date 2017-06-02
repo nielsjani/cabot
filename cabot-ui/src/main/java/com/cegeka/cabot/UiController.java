@@ -238,6 +238,18 @@ public class UiController {
         resetBeurt();
         switchScanCardButtons();
         bepaalBotkaartAlsAanZet();
+        checkOfIemandGewonnenIs();
+    }
+
+    private void checkOfIemandGewonnenIs() {
+        if(botScore >=3){
+            System.out.println("BOT WON");
+            Platform.runLater(() -> wieIsAanBeurtLabel.textProperty().setValue("I won. As expected."));
+        }
+        if(humanScore >=3){
+            System.out.println("HUMAN WON");
+            Platform.runLater(() -> wieIsAanBeurtLabel.textProperty().setValue("Oh, the bag of meat won. His brain might be suitable for recruitment into my core"));
+        }
     }
 
     private void bepaalBotkaartAlsAanZet() {
@@ -292,8 +304,7 @@ public class UiController {
         return event -> {
             beurt.getHandkaarten().add(this.scannedKaart);
             this.scannedKaart = null;
-            //TODO: terug naar 5 veranderen
-            if (beurt.getHandkaarten().size() < 2) {
+            if (beurt.getHandkaarten().size() < 5) {
                 scannedKaartLabel.setText("Please show me the next card");
             } else {
                 scannedKaartLabel.setText("All hand cards scanned. I am ready to whoop your feeble human butt.");
