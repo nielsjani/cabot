@@ -2,10 +2,10 @@ package com.cegeka.cabot.api;
 
 import java.util.Set;
 
-public interface AIGameStateConverter {
+public interface AIGameStateConverter<State, Actie> {
 
-    <T> Integer toStateValue(T beurt);
+    Integer toStateValue(State state);
 
-    <T> Set<Integer> toPossibleActionValues(T beurt);
+    Set<Integer> toActionValues(Set<Actie> acties);
 
 }

@@ -9,6 +9,7 @@ import java.util.Set;
 
 import static com.cegeka.cabot.oorlogje.state.Beurt.beurt;
 import static com.google.common.collect.Lists.newArrayList;
+import static java.util.stream.Collectors.toSet;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class OorlogjeAIGameStateConverterTest {
@@ -31,7 +32,7 @@ public class OorlogjeAIGameStateConverterTest {
         Beurt beurt = beurt()
                 .withHandkaarten(newArrayList(new Kaart(4), new Kaart(2), new Kaart(4)));
 
-        Set<Integer> possibleActionValues = oorlogjeToAlgoValuesMapper.toPossibleActionValues(beurt);
+        Set<Integer> possibleActionValues = oorlogjeToAlgoValuesMapper.toActionValues(beurt.getHandkaarten().stream().collect(toSet()));
 
         assertThat(possibleActionValues).containsExactlyInAnyOrder(2, 4);
     }

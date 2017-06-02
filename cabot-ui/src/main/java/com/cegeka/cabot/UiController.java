@@ -1,9 +1,9 @@
 package com.cegeka.cabot;
 
-import com.cegeka.cabot.api.GameEngineInterface;
-import com.cegeka.cabot.api.beurt.Beurt;
-import com.cegeka.cabot.api.beurt.Kaart;
+import com.cegeka.cabot.oorlogje.GameEngineInterface;
 import com.cegeka.cabot.oorlogje.startsituatie.StartSituatie;
+import com.cegeka.cabot.oorlogje.state.Beurt;
+import com.cegeka.cabot.oorlogje.state.Kaart;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -17,7 +17,8 @@ import org.opencv.highgui.VideoCapture;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static com.cegeka.cabot.api.beurt.Beurt.beurt;
+import static com.cegeka.cabot.oorlogje.state.Beurt.beurt;
+
 
 public class UiController {
 

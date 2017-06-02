@@ -10,8 +10,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
+import java.util.Set;
+
 import static com.cegeka.cabot.oorlogje.state.Beurt.beurt;
 import static com.google.common.collect.Lists.newArrayList;
+import static java.util.stream.Collectors.toSet;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -31,13 +34,13 @@ public class OorlogjeInterfaceTest extends UnitTest{
         Beurt beurt = beurt().withGespeeldeKaarten(newArrayList())
                 .withHandkaarten(newArrayList(new Kaart(2), teSpelenKaartBepaaldDoorMachine, new Kaart(1)))
                 .withTegenstanderGespeeldeKaarten(newArrayList());
-        when(oorlogjePlayer.bepaalActieOmTeSpelen(beurt)).thenReturn(teSpelenKaartBepaaldDoorMachine);
+        when(oorlogjePlayer.bepaalActieOmTeSpelen(beurt, beurt.getHandkaarten().stream().collect(toSet()))).thenReturn(teSpelenKaartBepaaldDoorMachine);
         when(rewardCalculator.bepaalRewardVoorGespeeldeKaart(beurt, teSpelenKaartBepaaldDoorMachine)).thenReturn(41);
 
         Kaart kaartTeSpelen = oorlogjeInterface.bepaalTeSpelenKaart(beurt);
 
         assertThat(kaartTeSpelen).isEqualTo(teSpelenKaartBepaaldDoorMachine);
-        verify(oorlogjePlayer).bepaalActieOmTeSpelen(beurt);
-        verify(oorlogjePlayer).kenRewardToeVoorGespeeldeActie(Mockito.any(Beurt.class), beurt, teSpelenKaartBepaaldDoorMachine, 41);
+        verify(oorlogjePlayer).bepaalActieOmTeSpelen(beurt, beurt.getHandkaarten().stream().collect(toSet()));
+        verify(oorlogjePlayer).kenRewardToeVoorGespeeldeActie(Mockito.any(Beurt.class), teSpelenKaartBepaaldDoorMachine, beurt, Mockito.any(Set.class), 41);
     }
 }

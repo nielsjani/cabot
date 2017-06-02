@@ -1,20 +1,20 @@
-package com.cegeka.cabot.oorlogje.train;
+package com.cegeka.cabot.oorlogje;
 
 import com.cegeka.cabot.algorithm.qlearning.QLearningSimplexAlgo;
 import com.cegeka.cabot.api.TotalScores;
-import com.cegeka.cabot.oorlogje.OorlogjeGameEngine;
 import com.cegeka.cabot.oorlogje.player.AIOorlogjePlayer;
 import com.cegeka.cabot.oorlogje.player.OorlogjeAIGameStateConverter;
 import com.cegeka.cabot.oorlogje.player.RandomOorlogjePlayer;
 
-public class GenerateTrainingData {
+public class Battlefield {
 
     public static void main(String[] args) {
         System.out.println("Training Fase");
 
-        RandomOorlogjePlayer randomOorlogjePlayer = new RandomOorlogjePlayer();
         QLearningSimplexAlgo qLearningSimplexAlgo = new QLearningSimplexAlgo();
         QLearningSimplexAlgo qLearningSimplexAlgoEnhanced = new QLearningSimplexAlgo();
+
+        RandomOorlogjePlayer randomOorlogjePlayer = new RandomOorlogjePlayer();
         AIOorlogjePlayer qLearningAlgo = new AIOorlogjePlayer(qLearningSimplexAlgo, new OorlogjeAIGameStateConverter());
         AIOorlogjePlayer qLearningAlgoEnhanced = new AIOorlogjePlayer(qLearningSimplexAlgoEnhanced, new OorlogjeAIGameStateConverter());
 

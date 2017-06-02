@@ -12,6 +12,4 @@ public class Beurt {
         return new Beurt();
     }
 
-
-
 }

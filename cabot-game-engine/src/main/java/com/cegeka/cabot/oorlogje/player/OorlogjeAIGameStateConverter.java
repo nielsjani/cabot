@@ -14,15 +14,16 @@ import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.toSet;
 
-public class OorlogjeAIGameStateConverter implements AIGameStateConverter {
+public class OorlogjeAIGameStateConverter implements AIGameStateConverter<Beurt, Kaart> {
 
     @Override
-    public <T> Integer toStateValue(T beurt) {
-        return createUniqueRepresentationForState(createState(((Beurt) beurt)));
+    public Integer toStateValue(Beurt beurt) {
+        return createUniqueRepresentationForState(createState(beurt));
     }
 
-    public <T> Set<Integer> toPossibleActionValues(T beurt) {
-        return ((Beurt) beurt).getHandkaarten().stream().map(Kaart::getWaarde).collect(toSet());
+    @Override
+    public Set<Integer> toActionValues(Set<Kaart> toegelatenTeSpelenKaarten) {
+        return toegelatenTeSpelenKaarten.stream().map(Kaart::getWaarde).collect(toSet());
     }
 
     private static List<Integer> createState(Beurt beurt) {

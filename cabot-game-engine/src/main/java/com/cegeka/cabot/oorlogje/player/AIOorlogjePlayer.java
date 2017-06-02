@@ -5,6 +5,8 @@ import com.cegeka.cabot.api.MachineLearningSimplexAlgo;
 import com.cegeka.cabot.oorlogje.state.Beurt;
 import com.cegeka.cabot.oorlogje.state.Kaart;
 
+import java.util.Set;
+
 
 public class AIOorlogjePlayer implements OorlogjePlayer {
 
@@ -17,17 +19,17 @@ public class AIOorlogjePlayer implements OorlogjePlayer {
     }
 
     @Override
-    public Kaart bepaalActieOmTeSpelen(Beurt beurt) {
-        return new Kaart(simplexAlgo.bepaalActie(AIGameStateConverter.toStateValue(beurt), AIGameStateConverter.toPossibleActionValues(beurt)));
+    public Kaart bepaalActieOmTeSpelen(Beurt beurt, Set<Kaart> toegelatenActies) {
+        return new Kaart(simplexAlgo.bepaalActie(AIGameStateConverter.toStateValue(beurt), AIGameStateConverter.toActionValues(toegelatenActies)));
     }
 
     @Override
-    public void kenRewardToeVoorGespeeldeActie(Beurt fromBeurt, Beurt toBeurt, Kaart gespeeldDoorMLAlgo, int reward) {
+    public void kenRewardToeVoorGespeeldeActie(Beurt fromBeurt, Kaart gespeeldeActieFromBeurt, Beurt toBeurt, Set<Kaart> toegelatenActiesToBeurt, int reward) {
         simplexAlgo.kenRewardToeVoorGekozenActie(
                 AIGameStateConverter.toStateValue(fromBeurt),
                 AIGameStateConverter.toStateValue(toBeurt),
-                gespeeldDoorMLAlgo.getWaarde(),
-                AIGameStateConverter.toPossibleActionValues(toBeurt),
+                gespeeldeActieFromBeurt.getWaarde(),
+                AIGameStateConverter.toActionValues(toegelatenActiesToBeurt),
                 reward);
     }
 }
