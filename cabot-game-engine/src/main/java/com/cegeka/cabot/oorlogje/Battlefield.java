@@ -18,21 +18,8 @@ public class Battlefield {
         System.out.println("Training Fase");
         OorlogjeGameEngine oorlogjeGameEngine = new OorlogjeGameEngine();
 
-        RandomOorlogjePlayer randomOorlogjePlayer = new RandomOorlogjePlayer();
-        AIOorlogjePlayer qLearningAlgo = new AIOorlogjePlayer();
-        AIOorlogjePlayer qLearningAlgoEnhanced = new AIOorlogjePlayer();
-
-        oorlogjeGameEngine
-                .start(100000, randomOorlogjePlayer, qLearningAlgo);
-
-        System.out.println();
-
-        qLearningAlgoEnhanced.setInLearningMode(true);
-        System.out.println();
-        System.out.println("Enhanced Training");
-        oorlogjeGameEngine.start(100000, qLearningAlgoEnhanced, qLearningAlgo);
-
-        qLearningAlgoEnhanced.setInLearningMode(false);
+        AIOorlogjePlayer qLearningEnhancedAlgo = new AIOorlogjePlayer("EnhancedQLearning");
+        trainMe(qLearningEnhancedAlgo);
 
         HumanOorlogjePlayer humanOorlogjePlayer = new HumanOorlogjePlayer();
 
@@ -41,7 +28,7 @@ public class Battlefield {
         System.out.println("GAME FASE");
 
         for (int i = 0; i < 5; i ++) {
-            speelSpelletje(oorlogjeGameEngine, qLearningAlgoEnhanced, humanOorlogjePlayer);
+            speelSpelletje(oorlogjeGameEngine, qLearningEnhancedAlgo, humanOorlogjePlayer);
         }
     }
 
