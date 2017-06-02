@@ -127,6 +127,7 @@ public class Battlefield {
 
     public static void trainMe(AIOorlogjePlayer aiOorlogjePlayer) {
         aiOorlogjePlayer.setInLearningMode(true);
+        System.out.println("Training player " + aiOorlogjePlayer.name());
 
         OorlogjeGameEngine oorlogjeGameEngine = new OorlogjeGameEngine();
 
@@ -144,13 +145,12 @@ public class Battlefield {
         aiOorlogjePlayer.setInLearningMode(false);
 
         TotalScores totalScores = oorlogjeGameEngine.start(100000, randomOorlogjePlayer, aiOorlogjePlayer);
+        System.out.println("Score tegen " + randomOorlogjePlayer.name() + ":");
         totalScores.print();
         totalScores = oorlogjeGameEngine.start(100000, qLearningAlgo, aiOorlogjePlayer);
+        System.out.println("Score tegen " + qLearningAlgo.name() + ":");
         totalScores.print();
 
-        System.out.println("Training player " + aiOorlogjePlayer.name());
-        System.out.println("Score tegen " + randomOorlogjePlayer.name() + ":");
-        System.out.println("Score tegen " + qLearningAlgo.name() + ":");
     }
 
 }
