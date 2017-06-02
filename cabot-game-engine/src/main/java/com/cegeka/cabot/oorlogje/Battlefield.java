@@ -2,17 +2,14 @@ package com.cegeka.cabot.oorlogje;
 
 import com.cegeka.cabot.algorithm.qlearning.QLearningSimplexAlgo;
 import com.cegeka.cabot.api.TotalScores;
-import com.cegeka.cabot.oorlogje.player.AIOorlogjePlayer;
-import com.cegeka.cabot.oorlogje.player.HumanOorlogjePlayer;
-import com.cegeka.cabot.oorlogje.player.OorlogjeAIGameStateConverter;
-import com.cegeka.cabot.oorlogje.player.RandomOorlogjePlayer;
+import com.cegeka.cabot.oorlogje.player.*;
 
 public class Battlefield {
 
     public static void main(String[] args) {
         // demoMachineLearning();
         // humanVSRandom();
-        humanVSEnhanced();
+         humanVSEnhanced();
     }
 
     private static void humanVSEnhanced() {
@@ -49,8 +46,8 @@ public class Battlefield {
         }
     }
 
-    private static void speelSpelletje(OorlogjeGameEngine oorlogjeGameEngine, AIOorlogjePlayer qLearningAlgoEnhanced, HumanOorlogjePlayer humanOorlogjePlayer) {
-        TotalScores totalScores = oorlogjeGameEngine.start (0, humanOorlogjePlayer, qLearningAlgoEnhanced);
+    private static void speelSpelletje(OorlogjeGameEngine oorlogjeGameEngine, OorlogjePlayer aiPlayer, HumanOorlogjePlayer humanOorlogjePlayer) {
+        TotalScores totalScores = oorlogjeGameEngine.start (0, humanOorlogjePlayer, aiPlayer);
 
         if (totalScores.player1AantalWinsBegint == 0 && totalScores.player1AantalWinsBegintNiet == 0) {
             System.out.println("You lost the game!");
@@ -63,16 +60,15 @@ public class Battlefield {
         HumanOorlogjePlayer humanOorlogjePlayer = new HumanOorlogjePlayer();
         RandomOorlogjePlayer randomOorlogjePlayer = new RandomOorlogjePlayer();
 
+        OorlogjeGameEngine oorlogjeGameEngine = new OorlogjeGameEngine();
+
         System.out.println();
         System.out.println("Random versus HUMAN PLAYER!!!");
         System.out.println("Now it's your time to shine...");
-        OorlogjeGameEngine oorlogjeGameEngine = new OorlogjeGameEngine();
-        TotalScores totalScores = oorlogjeGameEngine.start (1, humanOorlogjePlayer, randomOorlogjePlayer);
 
-        System.out.println("Human # wins (begint): " + totalScores.player1AantalWinsBegint);
-        System.out.println("Random # wins (begint niet): " + totalScores.player2AantalWinsBegintNiet);
-        System.out.println("Human # wins (begint niet): " + totalScores.player1AantalWinsBegintNiet);
-        System.out.println("Random # wins (begint): " + totalScores.player2AantalWinsBegint);
+        for (int i = 0; i < 5; i ++) {
+            speelSpelletje(oorlogjeGameEngine, randomOorlogjePlayer, humanOorlogjePlayer);
+        }
     }
 
     private static void demoMachineLearning() {
