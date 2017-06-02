@@ -1,15 +1,15 @@
 package com.cegeka.cabot;
 
 import com.cegeka.cabot.oorlogje.GameEngineInterface;
+import com.cegeka.cabot.oorlogje.reward.RewardCalculator;
 import com.cegeka.cabot.oorlogje.startsituatie.StartSituatie;
+import com.cegeka.cabot.oorlogje.state.Beurt;
+import com.cegeka.cabot.oorlogje.state.Kaart;
 import com.google.zxing.*;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 import javafx.application.Platform;
-import javafx.beans.property.StringProperty;
 import javafx.embed.swing.SwingFXUtils;
-import com.cegeka.cabot.oorlogje.state.Beurt;
-import com.cegeka.cabot.oorlogje.state.Kaart;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -35,19 +35,23 @@ public class UiController {
 
     @FXML
     private VBox rightPane;
+    @FXML
+    private VBox leftPane;
 
     @FXML
     private Button fetchStartingHandsButton;
     private Button startScanningBotHandButton;
     private Button cardScannedCorrectButton;
-    private Button cardScannedIncorrectButton;
 
     private Label startingPlayerLabel;
     private Label startPlayerLabel2;
     private Beurt beurt;
     private Kaart scannedKaart;
     private Label scannedKaartLabel = new Label("");
+    private Label wieIsAanBeurtLabel = new Label("");
     private Button startBeurtButton;
+    private Button scanBotCardButton;
+    private Button scanHumanCardButton;
 
 
     @FXML
@@ -59,6 +63,11 @@ public class UiController {
     private boolean cameraActive = false;
     // the id of the camera to be used
     private static int cameraId = 0;
+
+    private int botScore = 0;
+    private int humanScore = 0;
+    private Label scoreboardLabel;
+    private boolean botAanZet;
 
     @FXML
     public void startCamera() {
@@ -112,9 +121,6 @@ public class UiController {
             System.out.println("Found:");
             System.out.println(result.getText());
             this.scannedKaart = new Kaart(Integer.parseInt(result.getText()));
-//            scannedKaartLabel.setText("Card found: " + result.getText());
-//            rightPane.getChildren().add(scannedKaartLabel);
-//            Utils.onFXThread(scannedKaartLabel.textProperty(), "Card found: " + result.getText());
             Result finalResult = result;
             Platform.runLater(() -> {
                 scannedKaartLabel.textProperty().set("Card found: " + finalResult.getText());
@@ -184,24 +190,137 @@ public class UiController {
 
         cardScannedCorrectButton = new Button("Correct! Next!");
         cardScannedCorrectButton.setOnAction(confirmScanCorrect());
-        cardScannedIncorrectButton = new Button("Try again");
-        //TODO: implement me
 
         startBeurtButton = new Button("PLAY!");
+
+        scanBotCardButton = new Button("Played card chosen by bot");
+        scanBotCardButton.setOnAction(confirmBotPlayScan());
+
+        scanHumanCardButton = new Button("Correctly scanned human card");
+        scanHumanCardButton.setOnAction(confirmHumanPlayScan());
+    }
+
+    private EventHandler<ActionEvent> confirmBotPlayScan() {
+        return event -> {
+            if (isBeurtOver()) {
+                System.out.println("Beurt over");
+                handleBeurtOver();
+            } else {
+                this.botAanZet = !this.botAanZet;
+                this.switchScanCardButtons();
+            }
+        };
+    }
+
+    private EventHandler<ActionEvent> confirmHumanPlayScan() {
+        return event -> {
+            this.beurt.withGespeeldeKaartDoorTegenstanderHuidigeBeurt(scannedKaart);
+            if (isBeurtOver()) {
+                System.out.println("Beurt over");
+                handleBeurtOver();
+            } else {
+                this.botAanZet = !this.botAanZet;
+                Kaart kaart = this.gameEngineInterface.bepaalTeSpelenKaart(beurt);
+                beurt.withGespeeldeKaartHuidigeBeurt(kaart);
+                System.out.println("Play card with value: " + kaart.getWaarde());
+                handleBeurtOver();
+            }
+            //IF BEURT GEDAAN-> bepaal winnaar en zet buttons en alles correct + reset beurt gespeeldekaarten huidige beurt + bepaal starter volgende beurt
+            //ANDERS switch buttons
+        };
+    }
+
+    private void handleBeurtOver() {
+        bepaalWinnaar();
+        updateLabels();
+        resetBeurt();
+        switchScanCardButtons();
+    }
+
+    private void updateLabels() {
+        Platform.runLater(() -> wieIsAanBeurtLabel.textProperty().setValue(getWieIsAanBeurtText()));
+        Platform.runLater(() -> scoreboardLabel.textProperty().setValue(createScoreLabel()));
+    }
+
+    private void resetBeurt() {
+        this.beurt.withGespeeldeKaartHuidigeBeurt(null);
+        this.beurt.withGespeeldeKaartDoorTegenstanderHuidigeBeurt(null);
+    }
+
+    private void bepaalWinnaar() {
+        boolean botGewonnen = new RewardCalculator().gewonnen(beurt, beurt.getGespeeldeKaartHuidigeBeurt());
+        botAanZet = botGewonnen;
+        if(botGewonnen){
+            botScore++;
+            beurt.withIkBegin(true);
+        } else {
+            humanScore++;
+            beurt.withIkBegin(false);
+        }
+    }
+
+    private void switchScanCardButtons() {
+        if(botAanZet){
+            this.leftPane.getChildren().remove(scanHumanCardButton);
+            this.leftPane.getChildren().remove(scanBotCardButton);
+            this.leftPane.getChildren().add(scanBotCardButton);
+        } else {
+            this.leftPane.getChildren().remove(scanHumanCardButton);
+            this.leftPane.getChildren().remove(scanBotCardButton);
+            this.leftPane.getChildren().add(scanHumanCardButton);
+        }
+    }
+
+    private boolean isBeurtOver() {
+        return beurt.getGespeeldeKaartDoorTegenstanderHuidigeBeurt() != null && beurt.getGespeeldeKaartHuidigeBeurt() != null;
     }
 
     private EventHandler<ActionEvent> confirmScanCorrect() {
         return event -> {
             beurt.getHandkaarten().add(this.scannedKaart);
             this.scannedKaart = null;
-            if (beurt.getHandkaarten().size() < 5) {
+            //TODO: terug naar 5 veranderen
+            if (beurt.getHandkaarten().size() < 2) {
                 scannedKaartLabel.setText("Please show me the next card");
             } else {
                 scannedKaartLabel.setText("All hand cards scanned. I am ready to whoop your feeble human butt.");
                 rightPane.getChildren().remove(scannedKaartLabel);
                 rightPane.getChildren().add(scannedKaartLabel);
+                rightPane.getChildren().remove(cardScannedCorrectButton);
+                leftPane.getChildren().add(new Label("Score"));
+                scoreboardLabel = new Label(createScoreLabel());
+                leftPane.getChildren().add(scoreboardLabel);
+                wieIsAanBeurtLabel = new Label(getWieIsAanBeurtText());
+                leftPane.getChildren().add(wieIsAanBeurtLabel);
+                this.botAanZet = this.beurt.isIkBegin();
+                if (botAanZet) {
+                    Kaart kaart = gameEngineInterface.bepaalTeSpelenKaart(beurt);
+                    beurt.withGespeeldeKaartHuidigeBeurt(kaart);
+                    beurt.getGespeeldeKaarten().add(kaart);
+                    beurt.getHandkaarten().remove(kaart);
+                    System.out.println("Play card with value: " + kaart.getWaarde());
+                    leftPane.getChildren().add(this.scanBotCardButton);
+                } else {
+                    leftPane.getChildren().add(this.scanHumanCardButton);
+                }
             }
         };
+    }
+
+    private String getWieIsAanBeurtText() {
+        return botMoetBeginnenEnNogNietGespeeld() || tegenstanderMoetBeginnenEnHeeftAlGespeeld() ? "Assistent! Play my chosen card!" : "Scan the poorly chosen card of the opponent!";
+    }
+
+    private boolean tegenstanderMoetBeginnenEnHeeftAlGespeeld() {
+        return !beurt.isIkBegin() && beurt.getGespeeldeKaartDoorTegenstanderHuidigeBeurt() != null;
+    }
+
+    private boolean botMoetBeginnenEnNogNietGespeeld() {
+        return beurt.isIkBegin() && beurt.getGespeeldeKaartHuidigeBeurt() == null;
+    }
+
+    private String createScoreLabel() {
+        return String.format("Masterful Bot: %s - Lowlife scum: %s", this.botScore, this.humanScore);
     }
 
     private EventHandler<ActionEvent> startScanningBotHandCards() {
@@ -210,42 +329,10 @@ public class UiController {
             rightPane.getChildren().remove(startPlayerLabel2);
             rightPane.getChildren().remove(startScanningBotHandButton);
             rightPane.getChildren().add(cardScannedCorrectButton);
-            rightPane.getChildren().add(cardScannedIncorrectButton);
             rightPane.getChildren().add(scannedKaartLabel);
             startCamera();
-//            String scannedText = new QrCodeScanner().scan2(currentFrame, scannedKaartLabel, rightPane);
-//            scannedKaartLabel = new Label("The card I've found: " + scannedText);
-//            rightPane.getChildren().add(scannedKaartLabel);
-//            beurt.getHandkaarten().add(new Kaart(Integer.parseInt(scannedText)));
         };
     }
-
-//    /**
-//     * Stop the acquisition from the camera and release all the resources
-//     */
-//    private void stopAcquisition() {
-//        if (this.timer != null && !this.timer.isShutdown()) {
-//            try {
-//                // stop the timer
-//                this.timer.shutdown();
-//                this.timer.awaitTermination(33, TimeUnit.MILLISECONDS);
-//            } catch (InterruptedException e) {
-//                // log any exception
-//                System.err.println("Exception in stopping the frame capture, trying to release the camera now... " + e);
-//            }
-//        }
-//
-//        if (this.capture.isOpened()) {
-//            // release the camera
-//            this.capture.release();
-//        }
-//    }
-
-
-//    private void updateImageView(ImageView view, Image image) {
-//        Utils.onFXThread(view.imageProperty(), image);
-//    }
-
 
     public void fetchHands(ActionEvent actionEvent) {
         StartSituatie startSituatie = gameEngineInterface.getStartSituatie();
