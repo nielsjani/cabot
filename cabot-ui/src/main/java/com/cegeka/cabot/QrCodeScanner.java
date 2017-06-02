@@ -4,68 +4,64 @@ import com.github.sarxos.webcam.Webcam;
 import com.google.zxing.*;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
-import javafx.application.Platform;
-import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 
 import java.awt.image.BufferedImage;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class QrCodeScanner {
 
-    public String scan(ImageView currentFrame, ScheduledExecutorService timer) {
-
-        Webcam webcam = Webcam.getDefault(); // non-default (e.g. USB) webcam can be used too
-        webcam.open();
-        String qrCodeText = null;
-
-        do {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            Result result = null;
-            BufferedImage image = null;
-
-            if (webcam.isOpen()) {
-
-                if ((image = webcam.getImage()) == null) {
-                    continue;
-                }
-
-                renderWebcamOnScreen(currentFrame, webcam);
-
-                LuminanceSource source = new BufferedImageLuminanceSource(image);
-                BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-
-                try {
-                    result = new MultiFormatReader().decode(bitmap);
-                } catch (NotFoundException e) {
-                    // fall thru, it means there is no QR code in image
-                }
-            }
-            if (result != null) {
-                System.out.println("Found:");
-                System.out.println(result.getText());
-                qrCodeText = result.getText();
-                break;
-            }
-        } while (true);
-
-        return qrCodeText;
+    public String scan2(ImageView currentFrame, Label scannedKaartLabel, VBox rightPane) {
+                new WebcamRenderer().startCamera(currentFrame, scannedKaartLabel, rightPane);
+                return "";
     }
 
-    private void renderWebcamOnScreen(ImageView currentFrame, Webcam webcam) {
-        ScheduledExecutorService timer;
-        Runnable frameGrabber = () -> Platform.runLater(() -> {
-            currentFrame.imageProperty().setValue(SwingFXUtils.toFXImage(webcam.getImage(), null));
-        });
+    public String scan(ImageView currentFrame, ScheduledExecutorService timer) {
+        final String[] qrCodeText = {null};
 
-        timer = Executors.newSingleThreadScheduledExecutor();
-        timer.scheduleAtFixedRate(frameGrabber, 0, 33, TimeUnit.MILLISECONDS);
+        new Runnable() {
+            @Override
+            public void run() {
+
+                Webcam webcam = Webcam.getDefault(); // non-default (e.g. USB) webcam can be used too
+                webcam.open();
+
+
+                do {
+//            try {
+//                Thread.sleep(100);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+
+                    Result result = null;
+                    BufferedImage image = null;
+
+                    if (webcam.isOpen()) {
+                        if ((image = webcam.getImage()) == null) {
+                            continue;
+                        }
+
+                        LuminanceSource source = new BufferedImageLuminanceSource(image);
+                        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+
+                        try {
+                            result = new MultiFormatReader().decode(bitmap);
+                        } catch (NotFoundException e) {
+                            // fall thru, it means there is no QR code in image
+                        }
+                    }
+                    if (result != null) {
+                        System.out.println("Found:");
+                        System.out.println(result.getText());
+                        qrCodeText[0] = result.getText();
+                        break;
+                    }
+                } while (true);
+            }
+        };
+        return qrCodeText[0];
     }
 }

@@ -4,6 +4,12 @@ import com.cegeka.cabot.api.GameEngineInterface;
 import com.cegeka.cabot.api.beurt.Beurt;
 import com.cegeka.cabot.api.beurt.Kaart;
 import com.cegeka.cabot.oorlogje.startsituatie.StartSituatie;
+import com.google.zxing.*;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+import com.google.zxing.common.HybridBinarizer;
+import javafx.application.Platform;
+import javafx.beans.property.StringProperty;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -12,8 +18,11 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import org.opencv.core.Mat;
 import org.opencv.highgui.VideoCapture;
+import org.opencv.imgproc.Imgproc;
 
+import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -25,71 +34,118 @@ public class UiController {
 
     @FXML
     private VBox rightPane;
-    @FXML
-    private ImageView currentFrame;
+
     @FXML
     private Button fetchStartingHandsButton;
     private Button startScanningBotHandButton;
     private Button cardScannedCorrectButton;
     private Button cardScannedIncorrectButton;
 
-    // a timer for acquiring the video stream
-    private ScheduledExecutorService timer;
-    // the OpenCV object that performs the video capture
-    private VideoCapture capture = new VideoCapture();
     private Label startingPlayerLabel;
     private Label startPlayerLabel2;
     private Beurt beurt;
     private Kaart scannedKaart;
-    private Label scannedKaartLabel = new Label();
+    private Label scannedKaartLabel = new Label("");
+    private Button startBeurtButton;
 
-    public UiController() {
-        this.gameEngineInterface = new GameEngineInterface();
-        startScanningBotHandButton = new Button("Start scanning cards");
-        startScanningBotHandButton.setOnAction(startScanningBotHandCards());
 
-        cardScannedCorrectButton = new Button("Correct! Next!");
-        cardScannedCorrectButton.setOnAction(confirmScanCorrect());
-        cardScannedIncorrectButton = new Button("Try again");
-    }
+    @FXML
+    private ImageView currentFrame;
 
-    private EventHandler<ActionEvent> confirmScanCorrect() {
-        return event -> {
-            beurt.getHandkaarten().add(scannedKaart);
-            this.scannedKaart = null;
-            if (beurt.getHandkaarten().size() < 5) {
-                scannedKaartLabel.setText("Please show me the next card");
-                rightPane.getChildren().remove(scannedKaartLabel);
-                rightPane.getChildren().add(scannedKaartLabel);
-                String scannedText = new QrCodeScanner().scan(currentFrame, timer);
-                scannedKaartLabel = new Label(scannedText);
-                rightPane.getChildren().remove(scannedKaartLabel);
-                rightPane.getChildren().add(scannedKaartLabel);
-                this.scannedKaart = new Kaart(Integer.parseInt(scannedText));
+    private VideoCapture capture = new VideoCapture();
+    private ScheduledExecutorService timer;
+    // a flag to change the button behavior
+    private boolean cameraActive = false;
+    // the id of the camera to be used
+    private static int cameraId = 0;
+
+    @FXML
+    public void startCamera() {
+        if (!this.cameraActive) {
+            // start the video capture
+            this.capture.open(cameraId);
+
+            // is the video stream available?
+            if (this.capture.isOpened()) {
+                this.cameraActive = true;
+
+                // grab a frame every 33 ms (30 frames/sec)
+                Runnable frameGrabber = () -> {
+                    // effectively grab and process a single frame
+                    Mat frame = grabFrame();
+                    // convert and show the frame
+                    Image imageToShow = Utils.mat2Image(frame);
+                    updateImageView(currentFrame, imageToShow);
+                    scanQrCode(imageToShow);
+                };
+
+                this.timer = Executors.newSingleThreadScheduledExecutor();
+                this.timer.scheduleAtFixedRate(frameGrabber, 0, 33, TimeUnit.MILLISECONDS);
+
+                // update the button content
             } else {
-                scannedKaartLabel.setText("All hand cards scanned. I am ready to whoop your feeble human butt.");
+                // log the error
+                System.err.println("Impossible to open the camera connection...");
             }
-        };
+        } else {
+            // the camera is not active at this point
+            this.cameraActive = false;
+            // update again the button content
+
+            // stop the timer
+            this.stopAcquisition();
+        }
     }
 
-    private EventHandler<ActionEvent> startScanningBotHandCards() {
-        return event -> {
-            rightPane.getChildren().remove(startingPlayerLabel);
-            rightPane.getChildren().remove(startPlayerLabel2);
-            rightPane.getChildren().remove(startScanningBotHandButton);
-            rightPane.getChildren().add(cardScannedCorrectButton);
-            rightPane.getChildren().add(cardScannedIncorrectButton);
-            String scannedText = new QrCodeScanner().scan(currentFrame, timer);
-            scannedKaartLabel = new Label("The card I've found: " + scannedText);
-            rightPane.getChildren().add(scannedKaartLabel);
-            this.scannedKaart = new Kaart(Integer.parseInt(scannedText));
-//            beurt.getHandkaarten().add(new Kaart(Integer.parseInt(scannedText)));
-        };
+    private void scanQrCode(Image imageToShow) {
+        Result result = null;
+        LuminanceSource source = new BufferedImageLuminanceSource(SwingFXUtils.fromFXImage(imageToShow, null));
+        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+
+        try {
+            result = new MultiFormatReader().decode(bitmap);
+        } catch (NotFoundException e) {
+            // fall thru, it means there is no QR code in image
+        }
+        if (result != null) {
+            System.out.println("Found:");
+            System.out.println(result.getText());
+            this.scannedKaart = new Kaart(Integer.parseInt(result.getText()));
+//            scannedKaartLabel.setText("Card found: " + result.getText());
+//            rightPane.getChildren().add(scannedKaartLabel);
+//            Utils.onFXThread(scannedKaartLabel.textProperty(), "Card found: " + result.getText());
+            Result finalResult = result;
+            Platform.runLater(() -> {
+                scannedKaartLabel.textProperty().set("Card found: " + finalResult.getText());
+            });
+        }
     }
 
-    /**
-     * Stop the acquisition from the camera and release all the resources
-     */
+    private Mat grabFrame() {
+        // init everything
+        Mat frame = new Mat();
+
+        // check if the capture is open
+        if (this.capture.isOpened()) {
+            try {
+                // read the current frame
+                this.capture.read(frame);
+
+                // if the frame is not empty, process it
+                if (!frame.empty()) {
+                    //convert img to greyscale
+                    Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2GRAY);
+                }
+
+            } catch (Exception e) {
+                // log the error
+                System.err.println("Exception during the image elaboration: " + e);
+            }
+        }
+
+        return frame;
+    }
+
     private void stopAcquisition() {
         if (this.timer != null && !this.timer.isShutdown()) {
             try {
@@ -108,12 +164,7 @@ public class UiController {
         }
     }
 
-    /**
-     * Update the {@link ImageView} in the JavaFX main thread
-     *
-     * @param view  the {@link ImageView} to update
-     * @param image the {@link Image} to show
-     */
+
     private void updateImageView(ImageView view, Image image) {
         Utils.onFXThread(view.imageProperty(), image);
     }
@@ -121,6 +172,79 @@ public class UiController {
     protected void setClosed() {
         this.stopAcquisition();
     }
+
+
+    //OLD
+
+    public UiController() {
+        this.gameEngineInterface = new GameEngineInterface();
+        startScanningBotHandButton = new Button("Start scanning cards");
+        startScanningBotHandButton.setOnAction(startScanningBotHandCards());
+
+        cardScannedCorrectButton = new Button("Correct! Next!");
+        cardScannedCorrectButton.setOnAction(confirmScanCorrect());
+        cardScannedIncorrectButton = new Button("Try again");
+        //TODO: implement me
+
+        startBeurtButton = new Button("PLAY!");
+    }
+
+    private EventHandler<ActionEvent> confirmScanCorrect() {
+        return event -> {
+            beurt.getHandkaarten().add(this.scannedKaart);
+            this.scannedKaart = null;
+            if (beurt.getHandkaarten().size() < 5) {
+                scannedKaartLabel.setText("Please show me the next card");
+            } else {
+                scannedKaartLabel.setText("All hand cards scanned. I am ready to whoop your feeble human butt.");
+                rightPane.getChildren().remove(scannedKaartLabel);
+                rightPane.getChildren().add(scannedKaartLabel);
+            }
+        };
+    }
+
+    private EventHandler<ActionEvent> startScanningBotHandCards() {
+        return event -> {
+            rightPane.getChildren().remove(startingPlayerLabel);
+            rightPane.getChildren().remove(startPlayerLabel2);
+            rightPane.getChildren().remove(startScanningBotHandButton);
+            rightPane.getChildren().add(cardScannedCorrectButton);
+            rightPane.getChildren().add(cardScannedIncorrectButton);
+            rightPane.getChildren().add(scannedKaartLabel);
+            startCamera();
+//            String scannedText = new QrCodeScanner().scan2(currentFrame, scannedKaartLabel, rightPane);
+//            scannedKaartLabel = new Label("The card I've found: " + scannedText);
+//            rightPane.getChildren().add(scannedKaartLabel);
+//            beurt.getHandkaarten().add(new Kaart(Integer.parseInt(scannedText)));
+        };
+    }
+
+//    /**
+//     * Stop the acquisition from the camera and release all the resources
+//     */
+//    private void stopAcquisition() {
+//        if (this.timer != null && !this.timer.isShutdown()) {
+//            try {
+//                // stop the timer
+//                this.timer.shutdown();
+//                this.timer.awaitTermination(33, TimeUnit.MILLISECONDS);
+//            } catch (InterruptedException e) {
+//                // log any exception
+//                System.err.println("Exception in stopping the frame capture, trying to release the camera now... " + e);
+//            }
+//        }
+//
+//        if (this.capture.isOpened()) {
+//            // release the camera
+//            this.capture.release();
+//        }
+//    }
+
+
+//    private void updateImageView(ImageView view, Image image) {
+//        Utils.onFXThread(view.imageProperty(), image);
+//    }
+
 
     public void fetchHands(ActionEvent actionEvent) {
         StartSituatie startSituatie = gameEngineInterface.getStartSituatie();
