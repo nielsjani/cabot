@@ -1,4 +1,4 @@
-package com.cegeka.cabot.api.beurt;
+package com.cegeka.cabot.oorlogje.state;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;

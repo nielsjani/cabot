@@ -1,6 +1,7 @@
 package com.cegeka.cabot.api;
 
 import com.cegeka.cabot.UnitTest;
+import com.cegeka.cabot.oorlogje.GameEngineInterface;
 import com.cegeka.cabot.oorlogje.startsituatie.StartSituatie;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;

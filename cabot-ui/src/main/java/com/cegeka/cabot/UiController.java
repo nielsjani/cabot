@@ -1,8 +1,6 @@
 package com.cegeka.cabot;
 
-import com.cegeka.cabot.api.GameEngineInterface;
-import com.cegeka.cabot.api.beurt.Beurt;
-import com.cegeka.cabot.api.beurt.Kaart;
+import com.cegeka.cabot.oorlogje.GameEngineInterface;
 import com.cegeka.cabot.oorlogje.startsituatie.StartSituatie;
 import com.google.zxing.*;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
@@ -10,6 +8,8 @@ import com.google.zxing.common.HybridBinarizer;
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.embed.swing.SwingFXUtils;
+import com.cegeka.cabot.oorlogje.state.Beurt;
+import com.cegeka.cabot.oorlogje.state.Kaart;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -26,7 +26,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import static com.cegeka.cabot.api.beurt.Beurt.beurt;
+import static com.cegeka.cabot.oorlogje.state.Beurt.beurt;
+
 
 public class UiController {
 

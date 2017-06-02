@@ -1,6 +1,6 @@
 package com.cegeka.cabot.oorlogje.startsituatie;
 
-import com.cegeka.cabot.api.beurt.Kaart;
+import com.cegeka.cabot.oorlogje.state.Kaart;
 
 import java.util.List;
 import java.util.stream.Collectors;

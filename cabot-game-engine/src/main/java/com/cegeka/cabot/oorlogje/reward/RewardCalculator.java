@@ -1,7 +1,7 @@
-package com.cegeka.cabot.reward;
+package com.cegeka.cabot.oorlogje.reward;
 
-import com.cegeka.cabot.api.beurt.Beurt;
-import com.cegeka.cabot.api.beurt.Kaart;
+import com.cegeka.cabot.oorlogje.state.Beurt;
+import com.cegeka.cabot.oorlogje.state.Kaart;
 
 import java.util.List;
 

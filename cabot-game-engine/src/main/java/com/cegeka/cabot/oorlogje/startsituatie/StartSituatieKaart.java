@@ -3,8 +3,8 @@ package com.cegeka.cabot.oorlogje.startsituatie;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
-import static com.cegeka.cabot.oorlogje.OorlogjeConstants.MAXIMALE_KAARTWAARDE;
-import static com.cegeka.cabot.oorlogje.OorlogjeConstants.MINIMALE_KAARTWAARDE;
+import static com.cegeka.cabot.oorlogje.state.OorlogjeConstants.MAXIMALE_KAARTWAARDE;
+import static com.cegeka.cabot.oorlogje.state.OorlogjeConstants.MINIMALE_KAARTWAARDE;
 
 public class StartSituatieKaart {
     private int waarde;

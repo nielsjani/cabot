@@ -1,4 +1,4 @@
-package com.cegeka.cabot.oorlogje;
+package com.cegeka.cabot.oorlogje.state;
 
 public final class OorlogjeConstants {
     public static final int MAXIMALE_KAARTWAARDE = 5;

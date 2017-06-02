@@ -3,7 +3,7 @@ package com.cegeka.cabot.oorlogje.startsituatie;
 import com.cegeka.cabot.UnitTest;
 import org.junit.Test;
 
-import static com.cegeka.cabot.oorlogje.OorlogjeConstants.INITIELE_HAND_GROOTTE;
+import static com.cegeka.cabot.oorlogje.state.OorlogjeConstants.INITIELE_HAND_GROOTTE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StartSituatieFactoryTest extends UnitTest{

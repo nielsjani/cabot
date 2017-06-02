@@ -1,50 +1,19 @@
-package com.cegeka.cabot.train;
+package com.cegeka.cabot.oorlogje;
 
-import com.cegeka.cabot.api.GameEngineInterface;
-import com.cegeka.cabot.api.MachineLearningAlgo;
-import com.cegeka.cabot.api.beurt.Beurt;
-import com.cegeka.cabot.api.beurt.Kaart;
+import com.cegeka.cabot.api.GameEngine;
 import com.cegeka.cabot.oorlogje.api.OorlogjeInterface;
+import com.cegeka.cabot.oorlogje.player.OorlogjePlayer;
 import com.cegeka.cabot.oorlogje.startsituatie.StartSituatie;
+import com.cegeka.cabot.oorlogje.state.Beurt;
+import com.cegeka.cabot.oorlogje.state.Kaart;
 
-public class Trainer {
+public class OorlogjeGameEngine extends GameEngine<OorlogjePlayer> {
 
-    private TotalScores totalScores = new TotalScores();
-    private int player1Punten = 0;
-    private int player2Punten = 0;
-    private MachineLearningAlgo player1;
-    private MachineLearningAlgo player2;
-
-    public Trainer(MachineLearningAlgo player1, MachineLearningAlgo player2) {
-        this.player1 = player1;
-        this.player2 = player2;
+    public OorlogjeGameEngine() {
     }
 
-    public TotalScores start(int numberOfGames) {
-        for (int i = 0; i <= numberOfGames; i++) {
-//            System.out.println("Start playing game " + i);
-            boolean player1MochtBeginnen = playGame();
-            if (player1Punten > player2Punten) {
-                if (player1MochtBeginnen) {
-                    totalScores.player1AantalWinsBegint++;
-                } else {
-                    totalScores.player1AantalWinsBegintNiet++;
-                }
-            } else {
-                if (player1MochtBeginnen) {
-                    totalScores.player2AantalWinsBegintNiet++;
-                } else {
-                    totalScores.player2AantalWinsBegint++;
-                }
-            }
-            player1Punten = 0;
-            player2Punten = 0;
-//            System.out.println("Ended playing game " + i);
-        }
-        return totalScores;
-    }
-
-    private boolean playGame() {
+    @Override
+    protected boolean playGame(OorlogjePlayer player1, OorlogjePlayer player2) {
         StartSituatie startSituatie = new GameEngineInterface().getStartSituatie();
 
         OorlogjeInterface oorlogjeInterfacePlayer1 = new OorlogjeInterface(player1);
@@ -83,12 +52,8 @@ public class Trainer {
 
         if (isPlayer1Gewonnen) {
             player1Punten = player1Punten + 1;
-//            System.out.println("Player 1 won");
-//            System.out.println("Score:" + player1Punten + "-" + player2Punten);
         } else {
             player2Punten = player2Punten + 1;
-//            System.out.println("Player 2 won");
-//            System.out.println("Score:" + player1Punten + "-" + player2Punten);
         }
 
         resetBeurt(player1Beurt, isPlayer1Gewonnen);
