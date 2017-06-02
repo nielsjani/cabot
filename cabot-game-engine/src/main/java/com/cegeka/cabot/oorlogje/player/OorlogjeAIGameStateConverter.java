@@ -1,7 +1,8 @@
-package com.cegeka.cabot.api.mapper.oorlogje;
+package com.cegeka.cabot.oorlogje.player;
 
-import com.cegeka.cabot.api.beurt.Beurt;
-import com.cegeka.cabot.api.beurt.Kaart;
+import com.cegeka.cabot.api.AIGameStateConverter;
+import com.cegeka.cabot.oorlogje.state.Beurt;
+import com.cegeka.cabot.oorlogje.state.Kaart;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
@@ -13,14 +14,15 @@ import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.toSet;
 
-public class OorlogjeBeurtToAlgoValuesMapper {
+public class OorlogjeAIGameStateConverter implements AIGameStateConverter {
 
-    public static Integer toStateValue(Beurt beurt) {
-        return createUniqueRepresentationForState(createState(beurt));
+    @Override
+    public <T> Integer toStateValue(T beurt) {
+        return createUniqueRepresentationForState(createState(((Beurt) beurt)));
     }
 
-    public static Set<Integer> toPossibleActionValues(Beurt beurt) {
-        return beurt.getHandkaarten().stream().map(Kaart::getWaarde).collect(toSet());
+    public <T> Set<Integer> toPossibleActionValues(T beurt) {
+        return ((Beurt) beurt).getHandkaarten().stream().map(Kaart::getWaarde).collect(toSet());
     }
 
     private static List<Integer> createState(Beurt beurt) {
@@ -57,6 +59,5 @@ public class OorlogjeBeurtToAlgoValuesMapper {
 //                state.size()-1,
 //                state.stream().map(Object::toString).collect(Collectors.joining())));
     }
-
 
 }

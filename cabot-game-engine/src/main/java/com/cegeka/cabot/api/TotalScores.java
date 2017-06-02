@@ -1,4 +1,4 @@
-package com.cegeka.cabot.train;
+package com.cegeka.cabot.api;
 
 public class TotalScores {
 

@@ -1,21 +1,24 @@
-package com.cegeka.cabot.train;
+package com.cegeka.cabot.oorlogje.train;
 
-import com.cegeka.cabot.algorithm.baseline.BaseLineAlgo;
 import com.cegeka.cabot.algorithm.qlearning.QLearningSimplexAlgo;
-import com.cegeka.cabot.api.SimplexAlgoAdapter;
+import com.cegeka.cabot.api.TotalScores;
+import com.cegeka.cabot.oorlogje.OorlogjeGameEngine;
+import com.cegeka.cabot.oorlogje.player.AIOorlogjePlayer;
+import com.cegeka.cabot.oorlogje.player.OorlogjeAIGameStateConverter;
+import com.cegeka.cabot.oorlogje.player.RandomOorlogjePlayer;
 
 public class GenerateTrainingData {
 
     public static void main(String[] args) {
         System.out.println("Training Fase");
 
-        BaseLineAlgo baseLineAlgo = new BaseLineAlgo();
+        RandomOorlogjePlayer randomOorlogjePlayer = new RandomOorlogjePlayer();
         QLearningSimplexAlgo qLearningSimplexAlgo = new QLearningSimplexAlgo();
         QLearningSimplexAlgo qLearningSimplexAlgoEnhanced = new QLearningSimplexAlgo();
-        SimplexAlgoAdapter qLearningAlgo = new SimplexAlgoAdapter(qLearningSimplexAlgo);
-        SimplexAlgoAdapter qLearningAlgoEnhanced = new SimplexAlgoAdapter(qLearningSimplexAlgoEnhanced);
+        AIOorlogjePlayer qLearningAlgo = new AIOorlogjePlayer(qLearningSimplexAlgo, new OorlogjeAIGameStateConverter());
+        AIOorlogjePlayer qLearningAlgoEnhanced = new AIOorlogjePlayer(qLearningSimplexAlgoEnhanced, new OorlogjeAIGameStateConverter());
 
-        TotalScores totalScores = new Trainer(baseLineAlgo, qLearningAlgo)
+        TotalScores totalScores = new OorlogjeGameEngine(randomOorlogjePlayer, qLearningAlgo)
                 .start(100000);
 
         System.out.println("Random # wins (begint): " + totalScores.player1AantalWinsBegint);
@@ -27,7 +30,7 @@ public class GenerateTrainingData {
         System.out.println("For reals");
         qLearningSimplexAlgo.setInLearningMode(false);
 
-        totalScores = new Trainer(baseLineAlgo, qLearningAlgo)
+        totalScores = new OorlogjeGameEngine(randomOorlogjePlayer, qLearningAlgo)
                 .start(100000);
 
         System.out.println("Random # wins (begint): " + totalScores.player1AantalWinsBegint);
@@ -37,7 +40,7 @@ public class GenerateTrainingData {
 
         System.out.println();
         System.out.println("Twin fight!");
-        totalScores = new Trainer(qLearningAlgo, qLearningAlgo)
+        totalScores = new OorlogjeGameEngine(qLearningAlgo, qLearningAlgo)
                 .start(100000);
 
         System.out.println("QLearning 1 # wins (begint): " + totalScores.player1AantalWinsBegint);
@@ -47,7 +50,7 @@ public class GenerateTrainingData {
 
         System.out.println();
         System.out.println("Enhanced Training");
-        totalScores = new Trainer(qLearningAlgoEnhanced, qLearningAlgo)
+        totalScores = new OorlogjeGameEngine(qLearningAlgoEnhanced, qLearningAlgo)
                 .start(100000);
 
         System.out.println("QLearning 1 # wins (begint): " + totalScores.player1AantalWinsBegint);
@@ -59,7 +62,7 @@ public class GenerateTrainingData {
 
         System.out.println();
         System.out.println("Enhanced Fight");
-        totalScores = new Trainer(qLearningAlgoEnhanced, qLearningAlgo)
+        totalScores = new OorlogjeGameEngine(qLearningAlgoEnhanced, qLearningAlgo)
                 .start(100000);
 
         System.out.println("QLearning 1 # wins (begint): " + totalScores.player1AantalWinsBegint);
@@ -70,7 +73,7 @@ public class GenerateTrainingData {
 
         System.out.println();
         System.out.println("Enhanced Fight versus random");
-        totalScores = new Trainer(baseLineAlgo, qLearningAlgo)
+        totalScores = new OorlogjeGameEngine(randomOorlogjePlayer, qLearningAlgo)
                 .start(100000);
 
         System.out.println("Random # wins (begint): " + totalScores.player1AantalWinsBegint);

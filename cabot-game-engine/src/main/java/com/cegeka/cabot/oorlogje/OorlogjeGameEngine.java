@@ -1,25 +1,27 @@
-package com.cegeka.cabot.train;
+package com.cegeka.cabot.oorlogje;
 
-import com.cegeka.cabot.api.GameEngineInterface;
-import com.cegeka.cabot.api.MachineLearningAlgo;
-import com.cegeka.cabot.api.beurt.Beurt;
-import com.cegeka.cabot.api.beurt.Kaart;
+import com.cegeka.cabot.api.GameEngine;
+import com.cegeka.cabot.api.TotalScores;
 import com.cegeka.cabot.oorlogje.api.OorlogjeInterface;
+import com.cegeka.cabot.oorlogje.player.OorlogjePlayer;
 import com.cegeka.cabot.oorlogje.startsituatie.StartSituatie;
+import com.cegeka.cabot.oorlogje.state.Beurt;
+import com.cegeka.cabot.oorlogje.state.Kaart;
 
-public class Trainer {
+public class OorlogjeGameEngine implements GameEngine {
 
     private TotalScores totalScores = new TotalScores();
     private int player1Punten = 0;
     private int player2Punten = 0;
-    private MachineLearningAlgo player1;
-    private MachineLearningAlgo player2;
+    private OorlogjePlayer player1;
+    private OorlogjePlayer player2;
 
-    public Trainer(MachineLearningAlgo player1, MachineLearningAlgo player2) {
+    public OorlogjeGameEngine(OorlogjePlayer player1, OorlogjePlayer player2) {
         this.player1 = player1;
         this.player2 = player2;
     }
 
+    @Override
     public TotalScores start(int numberOfGames) {
         for (int i = 0; i <= numberOfGames; i++) {
             boolean player1MochtBeginnen = playGame();

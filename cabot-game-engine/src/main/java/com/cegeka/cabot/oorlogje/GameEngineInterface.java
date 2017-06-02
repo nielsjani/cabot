@@ -1,9 +1,9 @@
-package com.cegeka.cabot.api;
+package com.cegeka.cabot.oorlogje;
 
-import com.cegeka.cabot.api.beurt.Beurt;
-import com.cegeka.cabot.api.beurt.Kaart;
 import com.cegeka.cabot.oorlogje.api.OorlogjeInterface;
 import com.cegeka.cabot.oorlogje.startsituatie.StartSituatie;
+import com.cegeka.cabot.oorlogje.state.Beurt;
+import com.cegeka.cabot.oorlogje.state.Kaart;
 
 public class GameEngineInterface {
 

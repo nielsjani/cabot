@@ -1,11 +1,11 @@
 package com.cegeka.cabot.oorlogje.reward;
 
 import com.cegeka.cabot.UnitTest;
-import com.cegeka.cabot.api.beurt.Beurt;
-import com.cegeka.cabot.api.beurt.Kaart;
+import com.cegeka.cabot.oorlogje.state.Beurt;
+import com.cegeka.cabot.oorlogje.state.Kaart;
 import org.junit.Test;
 
-import static com.cegeka.cabot.api.beurt.Beurt.beurt;
+import static com.cegeka.cabot.oorlogje.state.Beurt.beurt;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 
