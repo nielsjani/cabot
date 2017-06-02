@@ -10,9 +10,9 @@ import com.cegeka.cabot.oorlogje.player.RandomOorlogjePlayer;
 public class Battlefield {
 
     public static void main(String[] args) {
-        demoMachineLearning();
+        // demoMachineLearning();
         // humanVSRandom();
-        // humanVSEnhanced();
+        humanVSEnhanced();
     }
 
     private static void humanVSEnhanced() {
@@ -41,7 +41,7 @@ public class Battlefield {
         HumanOorlogjePlayer humanOorlogjePlayer = new HumanOorlogjePlayer();
 
         System.out.println();
-        System.out.println("Random versus HUMAN PLAYER!!!");
+        System.out.println("Enhanced versus HUMAN PLAYER!!!");
         System.out.println("GAME FASE");
         TotalScores totalScores = oorlogjeGameEngine.start (9, humanOorlogjePlayer, qLearningAlgoEnhanced);
 
