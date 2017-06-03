@@ -3,15 +3,15 @@ package com.cegeka.cabot.oorlogje;
 import com.cegeka.cabot.api.TotalScores;
 import com.cegeka.cabot.oorlogje.player.AIOorlogjePlayer;
 import com.cegeka.cabot.oorlogje.player.HumanOorlogjePlayer;
+import com.cegeka.cabot.oorlogje.player.OorlogjePlayer;
 import com.cegeka.cabot.oorlogje.player.RandomOorlogjePlayer;
-import com.cegeka.cabot.oorlogje.player.*;
 
 public class Battlefield {
 
     public static void main(String[] args) {
-//         demoMachineLearning();
+         demoMachineLearning();
         // humanVSRandom();
-        humanVSEnhanced();
+//        humanVSEnhanced();
 //        trainMe(new AIOorlogjePlayer("TrainedBot"));
     }
 

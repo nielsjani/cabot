@@ -27,12 +27,21 @@ public class QLearningSimplexAlgo implements MachineLearningSimplexAlgo {
     @Override
     public Integer bepaalActie(Integer state, Set<Integer> mogelijkeActies) {
         if (inLearningMode) {
-            return getRandomValueFromSet(mogelijkeActies);
+            Pair<Integer, Pair<Double, Integer>> gekozenPair = mogelijkeActies.stream()
+                    .map(actie -> Pair.of(actie, qMatrix.getQValue(Pair.of(state, actie))))
+                    .reduce(Pair.of(0, Pair.of(Double.NEGATIVE_INFINITY, Integer.MAX_VALUE)), (p1, p2) -> {
+                        if (p1.getRight().getRight() < p2.getRight().getRight()) return p1;
+                        return p2;
+                    });
+            if (!mogelijkeActies.contains(gekozenPair.getLeft())) {
+                throw new RuntimeException("Actie " + gekozenPair.getLeft() + " is niet toegelaten in state " + state);
+            }
+            return gekozenPair.getLeft();
         }
-        Pair<Integer, Double> gekozenPair = mogelijkeActies.stream()
+        Pair<Integer, Pair<Double, Integer>> gekozenPair = mogelijkeActies.stream()
                 .map(actie -> Pair.of(actie, qMatrix.getQValue(Pair.of(state, actie))))
-                .reduce(Pair.of(0, Double.NEGATIVE_INFINITY), (p1, p2) -> {
-                    if (p1.getRight() > p2.getRight()) return p1;
+                .reduce(Pair.of(0, Pair.of(Double.NEGATIVE_INFINITY, 0)), (p1, p2) -> {
+                    if (p1.getRight().getLeft() > p2.getRight().getLeft()) return p1;
                     return p2;
                 });
         Integer gekozenActie = gekozenPair.getLeft();
@@ -46,7 +55,7 @@ public class QLearningSimplexAlgo implements MachineLearningSimplexAlgo {
     public void kenRewardToeVoorGekozenActie(Integer fromState, Integer gekozenActie, Integer toState, Set<Integer> toStatemogelijkeActies, Integer reward) {
         if (inLearningMode) {
             Pair<Integer, Integer> fromStateActionPair = Pair.of(fromState, gekozenActie);
-            Double oldQValue = qMatrix.getQValue(fromStateActionPair);
+            Double oldQValue = qMatrix.getQValue(fromStateActionPair).getLeft();
 
             Double newQValue = oldQValue + ALPHA * ( reward + (GAMMA * getMaxQValueForStateActions(toState, toStatemogelijkeActies)) - oldQValue);
 
@@ -57,7 +66,7 @@ public class QLearningSimplexAlgo implements MachineLearningSimplexAlgo {
     private Double getMaxQValueForStateActions(Integer toState, Set<Integer> toStatemogelijkeActies) {
         return toStatemogelijkeActies.stream()
                 .map(actie -> Pair.of(toState, actie))
-                .mapToDouble(stateActionPair -> qMatrix.getQValue(stateActionPair))
+                .mapToDouble(stateActionPair -> qMatrix.getQValue(stateActionPair).getLeft())
                 .max().orElse(0d);
     }
 
